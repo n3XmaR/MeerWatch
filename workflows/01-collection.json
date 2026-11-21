@@ -1,0 +1,315 @@
+{
+  "name": "NeoPheme - Collection",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7681b486-66e2-498f-9e1d-c420242bb66c",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -176
+      ],
+      "id": "9d2f5de1-0f00-41ab-b83b-3e4ef4bef417",
+      "name": "Fetch The Hacker News"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'The Hacker News',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -176
+      ],
+      "id": "3d82193c-e253-4843-b7d6-739fe5a996d5",
+      "name": "Normalize The Hacker News"
+    },
+    {
+      "parameters": {
+        "url": "https://www.bleepingcomputer.com/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "585f1234-99b2-4c55-9f8b-36914d9cea57",
+      "name": "Fetch BleepingComputer"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'BleepingComputer',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "71ae6c8e-e544-448d-82ab-503016b71398",
+      "name": "Normalize BleepingComputer"
+    },
+    {
+      "parameters": {
+        "url": "https://krebsonsecurity.com/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        192
+      ],
+      "id": "f5c6f131-cc7c-47ea-b39c-c34ce5def77f",
+      "name": "Fetch Krebs"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'Krebs on Security',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        192
+      ],
+      "id": "999def04-b8f9-413d-a934-8d0871691507",
+      "name": "Normalize Krebs"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        800,
+        -16
+      ],
+      "id": "edd18f34-c138-40b1-89ec-ade8a9053343",
+      "name": "Merge All Sources"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c4ba5abc-438f-4a49-ab29-b4f042967b85",
+              "leftValue": "={{ $json.published_at }}",
+              "rightValue": "={{ $now.minus({ hours: 24 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "ecdb7250-2c92-4ecb-9c4e-fb9b80b5fff2",
+      "name": "Keep Last 24h"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "bb220a42-4bec-4f4c-a2c4-77b05120819c",
+      "name": "Dedupe by ID"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "published_at",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        0
+      ],
+      "id": "7f1fdc24-d619-4706-ac1d-15eda8628c24",
+      "name": "Sort Newest First"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch BleepingComputer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch The Hacker News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Krebs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch The Hacker News": {
+      "main": [
+        [
+          {
+            "node": "Normalize The Hacker News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize The Hacker News": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch BleepingComputer": {
+      "main": [
+        [
+          {
+            "node": "Normalize BleepingComputer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize BleepingComputer": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Fetch Krebs": {
+      "main": [
+        [
+          {
+            "node": "Normalize Krebs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Krebs": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge All Sources": {
+      "main": [
+        [
+          {
+            "node": "Keep Last 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Last 24h": {
+      "main": [
+        [
+          {
+            "node": "Dedupe by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe by ID": {
+      "main": [
+        [
+          {
+            "node": "Sort Newest First",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "edde1a69-51ff-4380-94b6-b2ab7db0c6b7",
+  "meta": {
+    "instanceId": "9cf380862454e46694e3b83fcef9baefc9551b209b8e746d4d780446d39e7eda"
+  },
+  "nodeGroups": [],
+  "id": "fjflOzIRXXnDlt1o",
+  "tags": []
+}
