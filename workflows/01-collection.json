@@ -95,7 +95,7 @@
     },
     {
       "parameters": {
-        "numberInputs": 4
+        "numberInputs": 5
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
@@ -116,7 +116,7 @@
       "typeVersion": 2,
       "position": [
         1440,
-        -48
+        -32
       ],
       "id": "bb220a42-4bec-4f4c-a2c4-77b05120819c",
       "name": "Dedupe by ID"
@@ -137,7 +137,7 @@
       "typeVersion": 1,
       "position": [
         1696,
-        -48
+        -32
       ],
       "id": "7f1fdc24-d619-4706-ac1d-15eda8628c24",
       "name": "Sort Newest First"
@@ -212,10 +212,37 @@
       "typeVersion": 2.4,
       "position": [
         1168,
-        -48
+        -32
       ],
       "id": "ecdb7250-2c92-4ecb-9c4e-fb9b80b5fff2",
       "name": "Keep Last 48h"
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCVeW9qkBjo3zosnqUbG7CFw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        416
+      ],
+      "id": "7880b0a7-30fa-425b-87b3-6dbccefde9c7",
+      "name": "Fetch YouTube John Hammond"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all()\n  .filter(item => !item.json.link.includes('/shorts/'))\n  .map(item => {\n    const d = item.json;\n    return {\n      json: {\n        id: d.link,\n        title: d.title,\n        url: d.link,\n        source: 'YouTube: ' + (d.author || 'John Hammond'),\n        type: 'video',\n        published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n        content: d.contentSnippet || d.content || ''\n      }\n    };\n  });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        416
+      ],
+      "id": "32f2ed9a-e9f4-4975-a60b-8a4a9cb4c28c",
+      "name": "Normalize YouTube John Hammond"
     }
   ],
   "pinData": {},
@@ -240,6 +267,11 @@
           },
           {
             "node": "Fetch CISA KEV",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch YouTube John Hammond",
             "type": "main",
             "index": 0
           }
@@ -377,6 +409,28 @@
           }
         ]
       ]
+    },
+    "Fetch YouTube John Hammond": {
+      "main": [
+        [
+          {
+            "node": "Normalize YouTube John Hammond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize YouTube John Hammond": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -384,7 +438,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "9197b06b-295c-4644-911e-a27282ac72bd",
+  "versionId": "ade13bc6-5f1e-4eed-b48e-bb5a8ae75073",
   "meta": {
     "instanceId": "9cf380862454e46694e3b83fcef9baefc9551b209b8e746d4d780446d39e7eda"
   },
