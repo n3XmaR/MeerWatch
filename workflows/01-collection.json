@@ -6,8 +6,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -160,
+        -64
       ],
       "id": "7681b486-66e2-498f-9e1d-c420242bb66c",
       "name": "Manual Trigger"
@@ -95,50 +95,16 @@
     },
     {
       "parameters": {
-        "numberInputs": 3
+        "numberInputs": 4
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        800,
-        -16
+        928,
+        -80
       ],
       "id": "edd18f34-c138-40b1-89ec-ade8a9053343",
       "name": "Merge All Sources"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 4
-          },
-          "conditions": [
-            {
-              "id": "c4ba5abc-438f-4a49-ab29-b4f042967b85",
-              "leftValue": "={{ $json.published_at }}",
-              "rightValue": "={{ $now.minus({ hours: 24 }) }}",
-              "operator": {
-                "type": "dateTime",
-                "operation": "after"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.4,
-      "position": [
-        1024,
-        0
-      ],
-      "id": "ecdb7250-2c92-4ecb-9c4e-fb9b80b5fff2",
-      "name": "Keep Last 24h"
     },
     {
       "parameters": {
@@ -149,8 +115,8 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1248,
-        0
+        1440,
+        -48
       ],
       "id": "bb220a42-4bec-4f4c-a2c4-77b05120819c",
       "name": "Dedupe by ID"
@@ -170,11 +136,86 @@
       "type": "n8n-nodes-base.sort",
       "typeVersion": 1,
       "position": [
-        1472,
-        0
+        1696,
+        -48
       ],
       "id": "7f1fdc24-d619-4706-ac1d-15eda8628c24",
       "name": "Sort Newest First"
+    },
+    {
+      "parameters": {
+        "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        -352
+      ],
+      "id": "22f7e62d-dac2-4929-9b8f-df4cef03b021",
+      "name": "Fetch CISA KEV"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "vulnerabilities",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -352
+      ],
+      "id": "169fb364-82dc-43e5-8075-e3877566e297",
+      "name": "Split KEV"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: `https://nvd.nist.gov/vuln/detail/${d.cveID}`,\n      title: `${d.cveID}: ${d.vulnerabilityName}`,\n      url: `https://nvd.nist.gov/vuln/detail/${d.cveID}`,\n      source: 'CISA KEV',\n      type: 'vuln',\n      published_at: new Date(d.dateAdded + 'T00:00:00Z').toISOString(),\n      content: `${d.vendorProject} ${d.product}. ${d.shortDescription} Required action: ${d.requiredAction}`\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        -352
+      ],
+      "id": "8bbca5eb-bb72-4f2b-9a11-58621da2784d",
+      "name": "Normalize CISA KEV"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c4ba5abc-438f-4a49-ab29-b4f042967b85",
+              "leftValue": "={{ $json.published_at }}",
+              "rightValue": "={{ $now.minus({ hours: 48 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        1168,
+        -48
+      ],
+      "id": "ecdb7250-2c92-4ecb-9c4e-fb9b80b5fff2",
+      "name": "Keep Last 48h"
     }
   ],
   "pinData": {},
@@ -194,6 +235,11 @@
           },
           {
             "node": "Fetch Krebs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch CISA KEV",
             "type": "main",
             "index": 0
           }
@@ -217,7 +263,7 @@
           {
             "node": "Merge All Sources",
             "type": "main",
-            "index": 0
+            "index": 1
           }
         ]
       ]
@@ -239,7 +285,7 @@
           {
             "node": "Merge All Sources",
             "type": "main",
-            "index": 1
+            "index": 2
           }
         ]
       ]
@@ -261,7 +307,7 @@
           {
             "node": "Merge All Sources",
             "type": "main",
-            "index": 2
+            "index": 3
           }
         ]
       ]
@@ -270,18 +316,7 @@
       "main": [
         [
           {
-            "node": "Keep Last 24h",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Keep Last 24h": {
-      "main": [
-        [
-          {
-            "node": "Dedupe by ID",
+            "node": "Keep Last 48h",
             "type": "main",
             "index": 0
           }
@@ -298,6 +333,50 @@
           }
         ]
       ]
+    },
+    "Fetch CISA KEV": {
+      "main": [
+        [
+          {
+            "node": "Split KEV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split KEV": {
+      "main": [
+        [
+          {
+            "node": "Normalize CISA KEV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize CISA KEV": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Last 48h": {
+      "main": [
+        [
+          {
+            "node": "Dedupe by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -305,7 +384,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "edde1a69-51ff-4380-94b6-b2ab7db0c6b7",
+  "versionId": "9197b06b-295c-4644-911e-a27282ac72bd",
   "meta": {
     "instanceId": "9cf380862454e46694e3b83fcef9baefc9551b209b8e746d4d780446d39e7eda"
   },
