@@ -95,7 +95,7 @@
     },
     {
       "parameters": {
-        "numberInputs": 5
+        "numberInputs": 6
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
@@ -243,6 +243,77 @@
       ],
       "id": "32f2ed9a-e9f4-4975-a60b-8a4a9cb4c28c",
       "name": "Normalize YouTube John Hammond"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/search/repositories",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=topic:security created:>{{ $now.minus({ days: 7 }).toFormat('yyyy-MM-dd') }} stars:>15"
+            },
+            {
+              "name": "sort",
+              "value": "stars"
+            },
+            {
+              "name": "order",
+              "value": "desc"
+            },
+            {
+              "name": "per_page",
+              "value": "20"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "NeoPheme"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        208,
+        624
+      ],
+      "id": "dad5b0e0-01e7-41ab-a633-05ca0e2ae968",
+      "name": "Fetch GitHub Tools"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        624
+      ],
+      "id": "5015d2d0-9eb2-4eba-8cfe-c1eaa352c3c1",
+      "name": "Split GitHub"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.html_url,\n      title: `${d.full_name} (${d.stargazers_count}★)`,\n      url: d.html_url,\n      source: 'GitHub',\n      type: 'tool',\n      published_at: new Date(d.created_at).toISOString(),\n      content: d.description || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        624
+      ],
+      "id": "d232a265-6082-432f-a5a0-df2fecd5af05",
+      "name": "Normalize GitHub Tools"
     }
   ],
   "pinData": {},
@@ -272,6 +343,11 @@
           },
           {
             "node": "Fetch YouTube John Hammond",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch GitHub Tools",
             "type": "main",
             "index": 0
           }
@@ -431,6 +507,39 @@
           }
         ]
       ]
+    },
+    "Fetch GitHub Tools": {
+      "main": [
+        [
+          {
+            "node": "Split GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split GitHub": {
+      "main": [
+        [
+          {
+            "node": "Normalize GitHub Tools",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize GitHub Tools": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -438,7 +547,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "ade13bc6-5f1e-4eed-b48e-bb5a8ae75073",
+  "versionId": "d2724a03-cd71-4f62-b437-816caf1c58cd",
   "meta": {
     "instanceId": "9cf380862454e46694e3b83fcef9baefc9551b209b8e746d4d780446d39e7eda"
   },
