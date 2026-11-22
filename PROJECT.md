@@ -21,6 +21,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 - Storage: n8n Data Table `neopheme_items` as a short rolling window. The collection filter keeps 3 days (by `published_at`); cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive. Revisit only if we need external DB access.
 - Dashboard reads data through n8n webhooks (API protected by a header token), not directly from the DB.
 - AI must rely on the source only, always return the original link, and score spam/low-quality items low.
+- Insert into the Data Table happens AFTER the AI step (so every stored row has AI fields). Add columns `category`, `importance`, `summary` in Phase 4.
 
 ## Normalized Item Schema
 
@@ -41,7 +42,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 ## Sources (Phase 2, done)
 
 - RSS: BleepingComputer, The Hacker News, Krebs on Security, SecurityWeek, Dark Reading
-- CISA KEV (HTTP + Split Out; `dateAdded` has no time, so T00:00Z)
+- CISA KEV (HTTP + Split Out; `dateAdded` has no time, so T00:00Z; filtered to last 3 days before the Merge)
 - YouTube RSS: John Hammond (Shorts filtered out)
 - GitHub Search API: topic:security, created last 7 days, stars>15 (contains spam/fake-star repos, needs tighter topics later)
 
@@ -63,9 +64,16 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 
 ## Workflow Files
 
-- `workflows/01-collection.json`: Phase 2 workflow (8 sources -> Merge -> Keep Last 48h -> Dedupe by ID -> Sort).
+- `workflows/01-collection.json`: Phase 2 archive (8 sources -> Merge -> Keep Last 48h -> Dedupe by ID -> Sort). Superseded by 02-storage.json.
 - `workflows/02-storage.json`: Phase 3 workflow (adds KEV Last 3 Days, Keep Last 3 Days, Read Stored Items, Find New Items, Store New Items, Cleanup Old Rows).
 - Docs: `docs/phase-3.md`.
+
+## Open Tasks
+
+- Phase 5: order the flow as Cleanup Old Rows -> Read Stored Items (not in parallel), and run Cleanup/Store after the AI step.
+- Verify Cleanup deletes genuinely old rows (check on 2026-11-26).
+- Review n8n 3.0 Migration Report; pin the n8n image version in docker-compose before deploy.
+- Tighten GitHub source topics (spam/fake stars).
 
 ## Working Style
 
@@ -77,5 +85,5 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 ## Security Rules
 
 - Never commit `.env`, API keys, or `N8N_ENCRYPTION_KEY`.
-- Check workflow JSON for `credentials`/tokens before every commit.
+- Check workflow JSON for `credentials`/tokens before every commit. The repo is PUBLIC.
 - Never run or download repos from GitHub results without reviewing them first.
