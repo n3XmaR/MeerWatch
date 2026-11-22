@@ -18,7 +18,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 - Automation: n8n (Docker locally, move to a VPS later).
 - AI: Gemini free tier while developing; maybe Claude Haiku later (API is paid, separate from the Claude.ai plan).
 - Language: dashboard UI and news summaries in English only (LTR). Chat assistant is bilingual: replies in the user's language (Arabic or English), technical terms stay in English.
-- Storage: n8n Data Table as a short rolling window (~3 days, auto-delete older). No permanent archive. Revisit only if we need external DB access.
+- Storage: n8n Data Table `neopheme_items` as a short rolling window. The collection filter keeps 3 days (by `published_at`); cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive. Revisit only if we need external DB access.
 - Dashboard reads data through n8n webhooks (API protected by a header token), not directly from the DB.
 - AI must rely on the source only, always return the original link, and score spam/low-quality items low.
 
@@ -36,6 +36,8 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 }
 ```
 
+> In the Data Table the `id` field is stored as `item_id`, because n8n adds its own internal `id`, `createdAt` and `updatedAt` columns.
+
 ## Sources (Phase 2, done)
 
 - RSS: BleepingComputer, The Hacker News, Krebs on Security, SecurityWeek, Dark Reading
@@ -50,8 +52,8 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 | 0 | Setup (repo, VS Code, Docker) | done |
 | 1 | n8n basics | done |
 | 2 | Collection (8 sources, normalize, merge, filter, dedupe) | done |
-| 3 | Storage + cross-day dedupe (Data Table, 3-day window) | next |
-| 4 | AI layer (category, importance 1-10, English summary, JSON output) | |
+| 3 | Storage + cross-day dedupe (Data Table, 3-day window) | done |
+| 4 | AI layer (category, importance 1-10, English summary, JSON output) | next |
 | 5 | Schedule (07:00) + error handling (Continue on Fail) | MVP |
 | 6 | API (webhooks + token) | |
 | 7 | Dashboard (HTML/CSS/JS, NeoPheme identity) | |
@@ -62,6 +64,8 @@ Personal cybersecurity news dashboard. n8n collects news every morning, AI ranks
 ## Workflow Files
 
 - `workflows/01-collection.json`: Phase 2 workflow (8 sources -> Merge -> Keep Last 48h -> Dedupe by ID -> Sort).
+- `workflows/02-storage.json`: Phase 3 workflow (adds KEV Last 3 Days, Keep Last 3 Days, Read Stored Items, Find New Items, Store New Items, Cleanup Old Rows).
+- Docs: `docs/phase-3.md`.
 
 ## Working Style
 
