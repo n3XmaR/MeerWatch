@@ -10,7 +10,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 ## Environment
 
 - OS: Windows. RAM is limited (Docker/WSL capped at 2GB via `C:\Users\zxamm\.wslconfig`).
-- Repo: `C:\Dev\NeoPheme` (outside OneDrive on purpose). GitHub: `n3XmaR/NeoPheme` (currently PRIVATE).
+- Repo: `C:\Dev\NeoPheme` (outside OneDrive on purpose). GitHub: `n3XmaR/NeoPheme` (currently PUBLIC).
 - n8n runs in Docker (`n8n/docker-compose.yml` + `n8n/.env`), http://localhost:5678, timezone Asia/Amman.
 - Telegram is blocked in Jordan, so no Telegram bot. Output is a website.
 - Everything important lives in files (repo + this PROJECT.md + docs/phase-*.md), so any chat or account can resume from them.

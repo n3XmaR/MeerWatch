@@ -1,0 +1,936 @@
+{
+  "name": "NeoPheme - Collection",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        1232
+      ],
+      "id": "7681b486-66e2-498f-9e1d-c420242bb66c",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        608
+      ],
+      "id": "9d2f5de1-0f00-41ab-b83b-3e4ef4bef417",
+      "name": "Fetch The Hacker News"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'The Hacker News',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        608
+      ],
+      "id": "3d82193c-e253-4843-b7d6-739fe5a996d5",
+      "name": "Normalize The Hacker News"
+    },
+    {
+      "parameters": {
+        "url": "https://www.bleepingcomputer.com/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        800
+      ],
+      "id": "585f1234-99b2-4c55-9f8b-36914d9cea57",
+      "name": "Fetch BleepingComputer"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'BleepingComputer',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        800
+      ],
+      "id": "71ae6c8e-e544-448d-82ab-503016b71398",
+      "name": "Normalize BleepingComputer"
+    },
+    {
+      "parameters": {
+        "url": "https://krebsonsecurity.com/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        992
+      ],
+      "id": "f5c6f131-cc7c-47ea-b39c-c34ce5def77f",
+      "name": "Fetch Krebs"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'Krebs on Security',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        992
+      ],
+      "id": "999def04-b8f9-413d-a934-8d0871691507",
+      "name": "Normalize Krebs"
+    },
+    {
+      "parameters": {
+        "numberInputs": 8
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1136,
+        992
+      ],
+      "id": "edd18f34-c138-40b1-89ec-ade8a9053343",
+      "name": "Merge All Sources"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        1088
+      ],
+      "id": "bb220a42-4bec-4f4c-a2c4-77b05120819c",
+      "name": "Dedupe by ID"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "published_at",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        1088
+      ],
+      "id": "7f1fdc24-d619-4706-ac1d-15eda8628c24",
+      "name": "Sort Newest First"
+    },
+    {
+      "parameters": {
+        "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        416
+      ],
+      "id": "22f7e62d-dac2-4929-9b8f-df4cef03b021",
+      "name": "Fetch CISA KEV"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "vulnerabilities",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        416
+      ],
+      "id": "169fb364-82dc-43e5-8075-e3877566e297",
+      "name": "Split KEV"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: `https://nvd.nist.gov/vuln/detail/${d.cveID}`,\n      title: `${d.cveID}: ${d.vulnerabilityName}`,\n      url: `https://nvd.nist.gov/vuln/detail/${d.cveID}`,\n      source: 'CISA KEV',\n      type: 'vuln',\n      published_at: new Date(d.dateAdded + 'T00:00:00Z').toISOString(),\n      content: `${d.vendorProject} ${d.product}. ${d.shortDescription} Required action: ${d.requiredAction}`\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        416
+      ],
+      "id": "8bbca5eb-bb72-4f2b-9a11-58621da2784d",
+      "name": "Normalize CISA KEV"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/securityweek",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        1376
+      ],
+      "id": "cf176376-9e1b-4791-a2b6-3b3342e462ad",
+      "name": "Fetch SecurityWeek"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const d = item.json;\n  return {\n    json: {\n      id: d.link,\n      title: d.title,\n      url: d.link,\n      source: 'SecurityWeek',\n      type: 'news',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: d.contentSnippet || ''\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        1376
+      ],
+      "id": "fc1a3c18-ae21-4ada-a43b-ca02fbd1761c",
+      "name": "Normalize SecurityWeek"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "10bc509c-ef65-495d-966a-64c0da647807",
+              "leftValue": "={{ $json.published_at }}",
+              "rightValue": "={{ $now.minus({ days: 3 }).toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        912,
+        416
+      ],
+      "id": "bd8a98c9-c0eb-493c-8053-9ec7bc3fe5c1",
+      "name": "KEV Last 3 Days"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c4ba5abc-438f-4a49-ab29-b4f042967b85",
+              "leftValue": "={{ $json.published_at }}",
+              "rightValue": "={{ $now.minus({ days: 3 }).toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        1360,
+        1088
+      ],
+      "id": "ecdb7250-2c92-4ecb-9c4e-fb9b80b5fff2",
+      "name": "Keep Last 3 Days"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "GP4c1hRnIkL8p0IU",
+          "mode": "list",
+          "cachedResultName": "neopheme_items",
+          "cachedResultUrl": "/projects/BV9Ts4xxGfBY4pLn/datatables/GP4c1hRnIkL8p0IU"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1808,
+        1904
+      ],
+      "id": "5d6a922d-e9c6-44de-82c1-94d52b2f76d6",
+      "name": "Read Stored Items",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id",
+              "field2": "item_id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        2032,
+        1424
+      ],
+      "id": "b6aa9729-49c8-472f-b09f-388d3307db44",
+      "name": "Find New Items"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "GP4c1hRnIkL8p0IU",
+          "mode": "list",
+          "cachedResultName": "neopheme_items",
+          "cachedResultUrl": "/projects/BV9Ts4xxGfBY4pLn/datatables/GP4c1hRnIkL8p0IU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "item_id": "={{ $json.id }}",
+            "title": "={{ $json.title }}",
+            "url": "={{ $json.url }}",
+            "source": "={{ $json.source }}",
+            "type": "={{ $json.type }}",
+            "content": "={{ $json.content }}",
+            "published_at": "={{ $json.published_at }}",
+            "category": "={{ $json.category }}",
+            "importance": "={{ $json.importance }}",
+            "summary": "={{ $json.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "item_id",
+              "displayName": "item_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "published_at",
+              "displayName": "published_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "importance",
+              "displayName": "importance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2704,
+        1424
+      ],
+      "id": "53e7782d-5f18-442e-a884-004c52e295ae",
+      "name": "Store New Items"
+    },
+    {
+      "parameters": {
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "value": "GP4c1hRnIkL8p0IU",
+          "mode": "list",
+          "cachedResultName": "neopheme_items",
+          "cachedResultUrl": "/projects/BV9Ts4xxGfBY4pLn/datatables/GP4c1hRnIkL8p0IU"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "createdAt",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ days: 4 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        2048
+      ],
+      "id": "7a89ac81-6a4c-4132-9c39-4266b5198fb5",
+      "name": "Cleanup Old Rows"
+    },
+    {
+      "parameters": {
+        "url": "https://portswigger.net/research/rss",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        1568
+      ],
+      "id": "2ddef8ae-45ec-454d-b58b-244faf8b8240",
+      "name": "Fetch PortSwigger Research"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (s) => (s || '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nreturn $input.all()\n  .map(item => item.json)\n  .filter(d => d.link && d.title && (d.isoDate || d.pubDate))\n  .map(d => ({\n    json: {\n      id: d.link,\n      title: clean(d.title),\n      url: d.link,\n      source: 'PortSwigger Research',\n      type: 'research',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: clean(d.contentSnippet)\n    }\n  }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        1568
+      ],
+      "id": "28987d10-0864-468d-9c4f-2cb7eb916703",
+      "name": "Normalize PortSwigger Research"
+    },
+    {
+      "parameters": {
+        "url": "https://blog.talosintelligence.com/rss/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        1184
+      ],
+      "id": "3a7955c9-6a05-4bca-8c91-68f3bfb77d02",
+      "name": "Fetch Talos"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (s) => (s || '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nreturn $input.all()\n  .map(item => item.json)\n  .filter(d => d.link && d.title && (d.isoDate || d.pubDate))\n  .map(d => ({\n    json: {\n      id: d.link,\n      title: clean(d.title),\n      url: d.link,\n      source: 'Cisco Talos',\n      type: 'research',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: clean(d.contentSnippet).slice(0, 500)\n    }\n  }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        1184
+      ],
+      "id": "9a68c068-5a2e-40d0-bbf5-ce0c1d1d2c4d",
+      "name": "Normalize Talos"
+    },
+    {
+      "parameters": {
+        "url": "https://isc.sans.edu/rssfeed.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        1760
+      ],
+      "id": "ca313e33-1427-4d04-a941-7c97fd98c55e",
+      "name": "Fetch SANS ISC"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (s) => (s || '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// removes the trailing date tag, e.g. \", (Tue, Nov 17th)\"\nconst stripDateTag = (t) =>\n  t.replace(/,?\\s*\\([A-Z][a-z]{2}, [A-Z][a-z]{2} \\d{1,2}(st|nd|rd|th)\\)\\s*$/, '');\n\nreturn $input.all()\n  .map(item => item.json)\n  .filter(d => d.link && d.title && (d.isoDate || d.pubDate))\n  .filter(d => !/^ISC Stormcast/i.test(d.title.trim()))\n  .map(d => ({\n    json: {\n      id: d.link,\n      title: stripDateTag(clean(d.title)),\n      url: d.link,\n      source: 'SANS ISC',\n      type: 'research',\n      published_at: new Date(d.isoDate || d.pubDate).toISOString(),\n      content: clean(d.contentSnippet).slice(0, 500)\n    }\n  }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        1760
+      ],
+      "id": "ef7ffa18-f958-4eee-8a00-987fa900e3e2",
+      "name": "Normalize SANS ISC"
+    },
+    {
+      "parameters": {
+        "jsCode": "const CONFIG = {\n  baseBySource: {\n    'CISA KEV': 7,\n    'PortSwigger Research': 7,\n    'Cisco Talos': 5,\n    'SANS ISC': 4,\n    'Krebs on Security': 5,\n    'BleepingComputer': 4,\n    'The Hacker News': 4,\n    'SecurityWeek': 4,\n  },\n  defaultBase: 4,\n\n  boosts: [\n    { re: /zero[- ]day|0-day/, pts: 3 },\n    { re: /actively exploited|exploited in the wild|in the wild|known exploited|\\bkev\\b/, pts: 3 },\n    { re: /\\brce\\b|remote code execution/, pts: 2 },\n    { re: /\\bcritical\\b/, pts: 1 },\n    { re: /\\bcvss (score: )?(9|10)/, pts: 1 },\n    { re: /ransomware/, pts: 1 },\n    { re: /\\bcve-\\d{4}-\\d{4,}/, pts: 1 },\n    { re: /patch tuesday|infocon/, pts: 2 },\n    { re: /backdoor|supply[- ]chain/, pts: 1 },\n    { re: /data breach|breach(ed)?/, pts: 1 },\n    { re: /espionage|china-linked|china-nexus|state-sponsored|\\bapt\\d*\\b/, pts: 1 },\n  ],\n\n  penalties: [\n    { re: /webinar|sponsored|\\bawards?\\b|partnership|partners with/, pts: -3 },\n    { re: /threat source newsletter/, pts: -2 },\n    { re: /guest diary/, pts: -2 },\n    { re: /\\bhow to\\b|tutorial|step[- ]by[- ]step/, pts: -1 },\n    { re: /\\bpricing\\b|launches|announces (new|the)/, pts: -1 },\n    { re: /\\bcvss (score: )?[0-4]\\.\\d/, pts: -2 },\n    { re: /nordpass|1password|bitwarden|flying blind|you('|’)re missing/, pts: -3 },\n    { re: /survey|a16z|report finds|feedback friday|in other news/, pts: -1 },\n    { re: /physical access/, pts: -2 },\n  ],\n\n  sourceRules: [\n    { source: 'PortSwigger Research', re: /top 10 web hacking/i, pts: -2 },\n  ],\n\n  recency: [\n    { maxHours: 24, pts: 1 },\n  ],\n\n  categories: [\n    { name: 'Exploit/Zero-day', re: /zero[- ]day|0-day|actively exploited|active exploitation|exploited in the wild|known exploited/ },\n    { name: 'Malware/Ransomware', re: /ransomware|malware|trojan|botnet|infostealer|stealer|backdoor|loader|\\brat\\b/ },\n    { name: 'Breach/Incident', re: /breach|data leak|leaked|\\bhack(ed|ers?)?\\b|compromised (systems|network|servers?)|stolen|stole|cyberattack|cyber attack/ },\n    { name: 'Vulnerability', re: /\\bcve-\\d{4}-\\d{4,}|vulnerabilit|patch|flaw|security update/ },\n    { name: 'Research', re: /researchers (have )?(show|demonstrat|disclos|found|discover)|proof-of-concept|\\bpoc\\b/ },\n    { name: 'Tool', re: /open[- ]source tool|new tool|github|framework/ },\n    { name: 'Policy/Other', re: /\\blaw\\b|regulation|fine[sd]?\\b|arrest|sentenced|indicted|gdpr|congress|sanctions/ },\n  ],\n  categoryByType: { vuln: 'Vulnerability', research: 'Research', news: 'Policy/Other' },\n\n  summaryLength: 200,\n};\n\nfunction cleanText(s) {\n  return String(s || '')\n    .replace(/<[^>]*>/g, ' ')\n    .replace(/&nbsp;/g, ' ')\n    .replace(/&amp;/g, '&')\n    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')\n    .replace(/&quot;/g, '\"').replace(/&#0?39;/g, \"'\")\n    .replace(/&#\\d+;|&[a-z]+;/gi, ' ')\n    .replace(/\\\\[nrt]/g, ' ')\n    .replace(/\\[(?:…|\\.\\.\\.)\\]|\\[&#8230;\\]/g, '')\n    .replace(/\\s+/g, ' ')\n    .replace(/\\s*The post .* appeared first on .*$/i, '')\n    .trim();\n}\n\nfunction makeSummary(text, max) {\n  if (text.length <= max) return text;\n  const cut = text.slice(0, max);\n  const lastSpace = cut.lastIndexOf(' ');\n  return cut.slice(0, lastSpace > 100 ? lastSpace : max).trim() + '…';\n}\n\nconst now = Date.now();\nconst out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  const content = cleanText(j.content);\n  const haystack = (String(j.title || '') + ' ' + content).toLowerCase();\n\n  let score = CONFIG.baseBySource[j.source] ?? CONFIG.defaultBase;\n\n  for (const b of CONFIG.boosts) if (b.re.test(haystack)) score += b.pts;\n  for (const p of CONFIG.penalties) if (p.re.test(haystack)) score += p.pts;\n  for (const r of CONFIG.sourceRules) {\n    if (j.source === r.source && r.re.test(j.title || '')) score += r.pts;\n  }\n\n  const ageH = (now - new Date(j.published_at).getTime()) / 36e5;\n  for (const r of CONFIG.recency) {\n    if (ageH >= 0 && ageH <= r.maxHours) { score += r.pts; break; }\n  }\n\n  const importance = Math.max(1, Math.min(10, Math.round(score)));\n\n  let category = CONFIG.categoryByType[j.type] || 'Policy/Other';\n  if (j.source === 'CISA KEV') {\n    category = 'Exploit/Zero-day';\n  } else {\n    for (const c of CONFIG.categories) {\n      if (c.re.test(haystack)) { category = c.name; break; }\n    }\n  }\n\n  out.push({\n    json: {\n      ...j,\n      category,\n      importance,\n      summary: makeSummary(content, CONFIG.summaryLength),\n    },\n  });\n}\n\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        1264
+      ],
+      "id": "2c7a198f-5002-4ca8-9e5f-6f747748098f",
+      "name": "Score Items"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch BleepingComputer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch The Hacker News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Krebs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch CISA KEV",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch SecurityWeek",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Stored Items",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Cleanup Old Rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch PortSwigger Research",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Talos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch SANS ISC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch The Hacker News": {
+      "main": [
+        [
+          {
+            "node": "Normalize The Hacker News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize The Hacker News": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Fetch BleepingComputer": {
+      "main": [
+        [
+          {
+            "node": "Normalize BleepingComputer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize BleepingComputer": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Fetch Krebs": {
+      "main": [
+        [
+          {
+            "node": "Normalize Krebs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Krebs": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge All Sources": {
+      "main": [
+        [
+          {
+            "node": "Keep Last 3 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe by ID": {
+      "main": [
+        [
+          {
+            "node": "Sort Newest First",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch CISA KEV": {
+      "main": [
+        [
+          {
+            "node": "Split KEV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split KEV": {
+      "main": [
+        [
+          {
+            "node": "Normalize CISA KEV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize CISA KEV": {
+      "main": [
+        [
+          {
+            "node": "KEV Last 3 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch SecurityWeek": {
+      "main": [
+        [
+          {
+            "node": "Normalize SecurityWeek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize SecurityWeek": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "KEV Last 3 Days": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Last 3 Days": {
+      "main": [
+        [
+          {
+            "node": "Dedupe by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort Newest First": {
+      "main": [
+        [
+          {
+            "node": "Find New Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Stored Items": {
+      "main": [
+        [
+          {
+            "node": "Find New Items",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Find New Items": {
+      "main": [
+        [
+          {
+            "node": "Score Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch PortSwigger Research": {
+      "main": [
+        [
+          {
+            "node": "Normalize PortSwigger Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize PortSwigger Research": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Fetch Talos": {
+      "main": [
+        [
+          {
+            "node": "Normalize Talos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch SANS ISC": {
+      "main": [
+        [
+          {
+            "node": "Normalize SANS ISC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize SANS ISC": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
+    },
+    "Normalize Talos": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Score Items": {
+      "main": [
+        [
+          {
+            "node": "Store New Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "86796bf6-168a-428b-90bf-ba535071b5b5",
+  "meta": {
+    "instanceId": "9cf380862454e46694e3b83fcef9baefc9551b209b8e746d4d780446d39e7eda"
+  },
+  "nodeGroups": [],
+  "id": "fjflOzIRXXnDlt1o",
+  "tags": []
+}
