@@ -20,7 +20,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 
 - Automation: n8n in Docker locally first; a VPS is optional later. Missed runs are not replayed: if the PC/Docker was off at 07:00, run Collection then Export manually, in that order.
 - No AI for now: category/importance/summary come from rules in a Code node. AI (Gemini free, maybe Claude Haiku) can be added later using the same columns.
-- One workflow "NeoPheme - Collection", two independent chains: Schedule 07:00 (collection: Cleanup -> Read Stored -> 8 sources -> Merge -> filter -> dedupe -> Find New Items -> Score Items -> Store) and Schedule 07:15 (export: Read For Export -> Build data.json -> GitHub). The export reads the table, so it runs even on days with no new items and the 3-day window keeps moving.
+- One workflow "NeoPheme - Collection", two independent chains: Schedule 07:00 (collection: Cleanup -> Read Stored -> 9 sources -> Merge -> filter -> dedupe -> Find New Items -> Score Items -> Store) and Schedule 07:15 (export: Read For Export -> Build data.json -> GitHub). The export reads the table, so it runs even on days with no new items and the 3-day window keeps moving.
 - Hosting: GitHub Pages from the orphan branch `gh-pages` (root). n8n commits ONLY `data.json` there; `main` stays clean. The dashboard is published to the same branch root by manually copying changed files from `dashboard/` through a git worktree (no GitHub Action), never deleting `data.json`. GitHub Pages is free only while the repo is PUBLIC.
 - GitHub token: fine-grained, `NeoPheme` only, Contents read/write, stored only in n8n Credentials, expires about 2027-02-21.
 - Public data URL: https://n3xmar.github.io/NeoPheme/data.json
@@ -30,10 +30,11 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 - Schedule: once a day. No dashboard refresh button.
 - Language: dashboard UI and summaries in English only (LTR). If a chat assistant is added later it replies in the user's language (Arabic or English), technical terms in English.
 - Storage: n8n Data Table `neopheme_items` as a short rolling window. Collection filter keeps 3 days (by `published_at`); Cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive.
-- Scoring: one Code node "Score Items" between Find New Items ("In A only") and Store New Items. All rules live in a CONFIG object at the top (base score per source, boosts, penalties, recency, categories). Scoring only runs on new items. Categories are fixed: Exploit/Zero-day, Malware/Ransomware, Breach/Incident, Vulnerability, Research, Tool, Policy/Other. CISA KEV is always Exploit/Zero-day. Promos get importance 1.
+- Scoring: one Code node "Score Items" between Find New Items ("In A only") and Store New Items. All rules live in a CONFIG object at the top (base score per source, per-source cap, boosts, penalties, recency, categories). Scoring only runs on new items. Categories are fixed: Exploit/Zero-day, Malware/Ransomware, Breach/Incident, Vulnerability, Research, Tool, Policy/Other. CISA KEV is always Exploit/Zero-day. Items with `type: 'tool'` are always category `Tool` (checked before the keyword rules, so a tool named "...loader" is not tagged Malware). Promos get importance 1.
+- Per-source cap: `CONFIG.maxBySource` limits the final importance of a source (currently `Kitploit: 6`), because Kitploit publishes everything and its descriptions contain boost words (RCE, backdoor, CVE) that would otherwise push random tools into "High" (8+). A truly important tool story should arrive from another source (CISA KEV, news) and score high there.
 - Error handling: source Fetch nodes use Continue (using error output, unconnected). Read For Export and the GitHub node use Stop Workflow (never publish a partial file). Read For Export uses Return All (default limit 50 truncates silently).
 - Duplicate grouping (the same story in several outlets) is done client-side in the dashboard (same CVE id, or title word overlap; tunable with `GROUP_SIMILARITY` and `GROUP_MIN_SHARED_WORDS` in `CONFIG`; shown as "Also reported by"). A score boost for stories seen in 2+ sources and server-side grouping in n8n are still deferred to Phase 10.
-- Reddit is not a source (RSS ended 2026-11-13). GitHub tool discovery is deferred to Phase 10 (allowlist or releases.atom feeds, longer window).
+- Reddit is not a source (RSS ended 2026-11-13). GitHub tool discovery is deferred to Phase 10 (allowlist or releases.atom feeds, longer window). Kitploit (added 2026-11-23) is the interim tool source, with a low score and a cap.
 - Never disable nodes (a disabled node still passes items through); delete them instead.
 - "Read Stored Items" uses Always Output Data + Execute Once; on an empty table it returns one empty item (expected, harmless).
 
@@ -76,14 +77,20 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 - Settings live in the `CONFIG` object at the top of `app.js`; colors are CSS variables on `:root` in `style.css`.
 - The stale banner text in `index.html` says "36 hours" in plain text. If `CONFIG.STALE_HOURS` changes, edit that text too.
 
-## Sources (8 Merge inputs)
+## Sources (9 Merge inputs)
 
 - news (RSS): BleepingComputer, The Hacker News, Krebs on Security, SecurityWeek
 - vuln: CISA KEV (HTTP + Split Out; `dateAdded` has no time so T00:00Z; filtered to last 3 days BEFORE the Merge)
 - research (RSS): Cisco Talos, PortSwigger Research, SANS ISC (Stormcast filtered out)
+- tool: Kitploit (added 2026-11-23). Not an RSS Read node: `Fetch KitPloit` (HTTP Request) -> `XML` (XML to JSON, Property Name `data`) -> `Split Out` (field `rss.channel.item`, about 50 items) -> `Normalize Kitploit` (Code) -> Merge input 9.
+  - Because it is HTTP + XML, there is no `isoDate` or `contentSnippet`; the code uses raw `title`, `link`, `pubDate`, `description`. `description` contains an `<img>` plus `<p>`, so the code strips tags first, then decodes entities (order matters).
+  - `id` = `link` (`guid` is parsed as an object, do not use it).
+  - Items whose title ends with "Updated!" are skipped (updates of old tools, not new ones).
+  - Title prefix: `New tool: <name>` for `/en/tools/` links, `Release: <name>` for `/en/posts/` links. Type is always `tool`.
+  - Scoring: base 3, cap 6, category always `Tool`. Expect importance 3-4 for most items.
 - Removed: YouTube, Dark Reading, old GitHub query. Not available: Reddit.
 - Candidates, unverified (open the feed in a browser first): Microsoft MSRC, Google Project Zero, Schneier, GitHub releases.atom feeds.
-- Adding a source: copy a Fetch + Normalize pair, change URL and `source`, add a Merge input, add its base score in the Score Items CONFIG.
+- Adding a source: copy a Fetch + Normalize pair, change URL and `source`, add a Merge input, add its base score in the Score Items CONFIG (`baseBySource`, and `maxBySource` if it needs a cap). The `source` string must match the key in CONFIG exactly, otherwise it silently gets `defaultBase`.
 
 ## Phases
 
@@ -93,6 +100,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 | 1 | n8n basics | done |
 | 2 | Collection | done |
 | 2b | More sources (Talos, PortSwigger, SANS) | done |
+| 2c | Kitploit tool source (HTTP + XML, cap 6) | done 2026-11-23 (verify on live site) |
 | 3 | Storage + cross-day dedupe | done |
 | 4 | Scoring without AI | done |
 | 5 | Schedule + error handling | done (verify first scheduled run 2026-11-24) |
@@ -100,17 +108,22 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 | 7 | Dashboard (assistant writes it fully), published on GitHub Pages | done, v2 published 2026-11-23 (verify live site) |
 | 8 | Optional: AI scoring/summaries + chat | |
 | 9 | Optional: move n8n to a VPS (HTTPS, Cloudflare Access, backups) | |
-| 10 | Improvements (GitHub tool discovery, more sources, server-side duplicate grouping and score boost, longer window for high-importance items, weekly digest) | |
+| 10 | Improvements (GitHub tool discovery, more sources, server-side duplicate grouping and score boost, longer window for high-importance items, weekly digest, Kitploit vendor allowlist) | |
 
 ## Workflow Files
 
-- `workflows/04-schedule-export.json`: Phase 5-6 workflow. Current.
-- `workflows/01-collection.json`, `02-storage.json`, `02b-sources.json`, `03-scoring.json`: Superseded.
+- `workflows/05-kitploit.json`: Current (Phase 5-6 + Kitploit + updated Score Items).
+- `workflows/01-collection.json`, `02-storage.json`, `02b-sources.json`, `03-scoring.json`, `04-schedule-export.json`: Superseded.
 - Docs: `docs/phase-2b.md`, `docs/phase-3.md`, `docs/phase-4.md`, `docs/phase-5-6.md`, `docs/phase-7.md`.
 - `data.json` lives on branch `gh-pages`, written by n8n. Never hand-edit it.
 
 ## Open Tasks
 
+- Export the updated workflow (with Kitploit + new Score Items) from n8n, save it in `workflows/` (for example `05-kitploit.json`), run the workflow security scan, `git status`, add by name, commit, push. Mark the old one as superseded here.
+- Verify Kitploit on the live dashboard: items show type `tool` and category `Tool`, none appear in Top threats, no odd duplicates. If "tool" shows as raw text instead of a nice label, adjust `TYPE_LABELS` in `app.js`.
+- Check the warning triangle on the `Fetch KitPloit` node (open it and read the message).
+- Watch Kitploit noise for the first few days: it publishes many small or unknown tools. If too noisy, lower the cap or base score, or filter by keywords. A vendor allowlist is the real fix (Phase 10).
+- Add Kitploit-specific rules later if needed (for example, a boost for well-known vendors).
 - Verify the live site after the v2 publish: no 404s in DevTools Network, `data.json` loaded from its own origin, filters, themes, save/hide/restore, mobile look.
 - Verify the first scheduled runs on 2026-11-24 (Executions + commit `data 2026-11-24` on gh-pages, and that `generated_at` updates on the live dashboard).
 - Verify Cleanup around 2026-11-28 (the table was cleared on 2026-11-23, so no row is older than 4 days before then).
