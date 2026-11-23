@@ -36,18 +36,6 @@
     "summary": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon…"
   },
   {
-    "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-cisco.html",
-    "title": "Hackers Exploit Critical Cisco Expressway Flaw, Breach Four Devices and Reach Internal Network",
-    "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-cisco.html",
-    "source": "The Hacker News",
-    "type": "news",
-    "published_at": "2026-11-20T10:32:50.000Z",
-    "content": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit.\n\nThe activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway",
-    "category": "Breach/Incident",
-    "importance": 8,
-    "summary": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept…"
-  },
-  {
     "id": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
     "title": "Hackers use autonomous AI tool Cairn to find zero-day, take over server",
     "url": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
