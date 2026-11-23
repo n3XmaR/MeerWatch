@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-23T15:39:15.997Z",
-  "count": 67,
+  "generated_at": "2026-11-23T17:58:24.126Z",
+  "count": 74,
   "items": [
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
@@ -39,6 +39,18 @@
       "summary": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known…"
     },
     {
+      "id": "https://thehackernews.com/2026/11/weekly-recap-vmware-0-day-java4shell.html",
+      "title": "⚡ Weekly Recap: VMware 0-Day, Java4Shell, NGINX2Root, Ruby2Shell, and a Whole Lot of Shell Trouble",
+      "url": "https://thehackernews.com/2026/11/weekly-recap-vmware-0-day-java4shell.html",
+      "source": "The Hacker News",
+      "type": "news",
+      "published_at": "2026-11-23T15:10:48.000Z",
+      "content": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open.\n\nThis week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely",
+      "category": "Exploit/Zero-day",
+      "importance": 9,
+      "summary": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door.…"
+    },
+    {
       "id": "https://www.securityweek.com/amazon-china-linked-hackers-ai-agents-exploited-medical-software-zero-day/",
       "title": "Amazon: China-Linked Hackers’ AI Agents Exploited Medical Software Zero-Day",
       "url": "https://www.securityweek.com/amazon-china-linked-hackers-ai-agents-exploited-medical-software-zero-day/",
@@ -49,6 +61,18 @@
       "category": "Exploit/Zero-day",
       "importance": 9,
       "summary": "A threat actor used autonomous Cairn AI agents to discover and exploit a critical MONAI Label vulnerability."
+    },
+    {
+      "id": "https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html",
+      "title": "Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions",
+      "url": "https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html",
+      "source": "The Hacker News",
+      "type": "news",
+      "published_at": "2026-11-23T13:22:20.000Z",
+      "content": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code.\n\nThe vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1.\n\n\"Binary-parser before 2.3.1 contains a code injection vulnerability that allows",
+      "category": "Vulnerability",
+      "importance": 8,
+      "summary": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as…"
     },
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html",
@@ -87,16 +111,28 @@
       "summary": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon…"
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
-      "title": "Hackers use autonomous AI tool Cairn to find zero-day, take over server",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
-      "source": "BleepingComputer",
+      "id": "https://www.securityweek.com/phpaftershell-vulnerability-revives-php2shells-attack-path/",
+      "title": "phpAfterShell Vulnerability Revives PHP2Shell’s Attack Path",
+      "url": "https://www.securityweek.com/phpaftershell-vulnerability-revives-php2shells-attack-path/",
+      "source": "SecurityWeek",
       "type": "news",
-      "published_at": "2026-11-20T17:30:00.000Z",
-      "content": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application. [...]",
-      "category": "Exploit/Zero-day",
+      "published_at": "2026-11-23T13:58:07.000Z",
+      "content": "If a session overwrite operation is interrupted, an attacker who controls the fresh data could trigger data deserialization and RCE.\nThe post phpAfterShell Vulnerability Revives PHP2Shell’s Attack Path appeared first on SecurityWeek.",
+      "category": "Vulnerability",
       "importance": 7,
-      "summary": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application."
+      "summary": "If a session overwrite operation is interrupted, an attacker who controls the fresh data could trigger data deserialization and RCE."
+    },
+    {
+      "id": "https://www.securityweek.com/n-able-patches-critical-flaw-disclosed-after-mail-assure-cyberattack/",
+      "title": "N-able Patches Critical Flaw Disclosed After Mail Assure Cyberattack ",
+      "url": "https://www.securityweek.com/n-able-patches-critical-flaw-disclosed-after-mail-assure-cyberattack/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T15:06:49.000Z",
+      "content": "The company has restored access to the affected services and continues to monitor the affected environments.\nThe post N-able Patches Critical Flaw Disclosed After Mail Assure Cyberattack  appeared first on SecurityWeek.",
+      "category": "Breach/Incident",
+      "importance": 6,
+      "summary": "The company has restored access to the affected services and continues to monitor the affected environments."
     },
     {
       "id": "https://www.securityweek.com/badbox-3-0-ad-fraud-operation-generating-40-billion-daily-bid-requests-disrupted/",
@@ -169,6 +205,78 @@
       "category": "Malware/Ransomware",
       "importance": 6,
       "summary": "The chief technology officer and co-founder of ransomwarehelp.com, a six year old Florida business that claimed to use \"advanced cryptographic tools\" to restore data locked by ransomware, has been…"
+    },
+    {
+      "id": "https://thehackernews.com/2026/11/webworm-suspected-of-modifying.html",
+      "title": "Webworm Suspected of Modifying SoftEther VPN to Evade Detection and Hide Remote Access",
+      "url": "https://thehackernews.com/2026/11/webworm-suspected-of-modifying.html",
+      "source": "The Hacker News",
+      "type": "news",
+      "published_at": "2026-11-23T17:45:15.000Z",
+      "content": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks.\n\nThe modified variant \"implements various tricks to hide itself from security tools,\"",
+      "category": "Breach/Incident",
+      "importance": 5,
+      "summary": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints,…"
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/globetopper-loses-25-million-after-hackers-steal-70k-in-gift-cards/",
+      "title": "GlobeTopper loses $2.5 million after hackers steal $70k in gift cards",
+      "url": "https://www.bleepingcomputer.com/news/security/globetopper-loses-25-million-after-hackers-steal-70k-in-gift-cards/",
+      "source": "BleepingComputer",
+      "type": "news",
+      "published_at": "2026-11-23T16:50:01.000Z",
+      "content": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000. [...]",
+      "category": "Breach/Incident",
+      "importance": 5,
+      "summary": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000."
+    },
+    {
+      "id": "https://www.securityweek.com/azure-flaw-exploited-to-target-secrets-at-norwegian-energy-firms/",
+      "title": "Azure Flaw Exploited to Target Secrets at Norwegian Energy Firms",
+      "url": "https://www.securityweek.com/azure-flaw-exploited-to-target-secrets-at-norwegian-energy-firms/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T15:47:40.000Z",
+      "content": "Microsoft closed an Azure API Management flaw exploited to target secrets at Norwegian energy companies, with other sectors also affected.\nThe post Azure Flaw Exploited to Target Secrets at Norwegian Energy Firms appeared first on SecurityWeek.",
+      "category": "Vulnerability",
+      "importance": 5,
+      "summary": "Microsoft closed an Azure API Management flaw exploited to target secrets at Norwegian energy companies, with other sectors also affected."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/ai-agents-are-creating-a-shared-responsibility-gap/",
+      "title": "AI Agents Are Creating a Shared Responsibility Gap",
+      "url": "https://www.bleepingcomputer.com/news/security/ai-agents-are-creating-a-shared-responsibility-gap/",
+      "source": "BleepingComputer",
+      "type": "news",
+      "published_at": "2026-11-23T15:00:10.000Z",
+      "content": "AI agents operate across multiple platforms, creating security gaps when no single vendor can see or control their actions. Token Security examines the shared responsibility problem and explains how organizations can better manage agent identities, permissions, and accountability. [...]",
+      "category": "Policy/Other",
+      "importance": 5,
+      "summary": "AI agents operate across multiple platforms, creating security gaps when no single vendor can see or control their actions. Token Security examines the shared responsibility problem and explains how…"
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-testing-fix-for-windows-11-bluetooth-audio-quality-drops/",
+      "title": "Microsoft testing fix for Windows 11 Bluetooth audio quality drops",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-testing-fix-for-windows-11-bluetooth-audio-quality-drops/",
+      "source": "BleepingComputer",
+      "type": "news",
+      "published_at": "2026-11-23T13:28:45.000Z",
+      "content": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users. [...]",
+      "category": "Policy/Other",
+      "importance": 5,
+      "summary": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users."
+    },
+    {
+      "id": "https://www.securityweek.com/gl-inet-routers-kvms-compromised-via-remote-management-service-flaw/",
+      "title": "GL.iNet Routers, KVMs Compromised via Remote Management Service Flaw",
+      "url": "https://www.securityweek.com/gl-inet-routers-kvms-compromised-via-remote-management-service-flaw/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T13:26:22.000Z",
+      "content": "Attackers abused a flaw in the GoodCloud remote management service to push malware to devices, and cleaning them requires new firmware.\nThe post GL.iNet Routers, KVMs Compromised via Remote Management Service Flaw appeared first on SecurityWeek.",
+      "category": "Malware/Ransomware",
+      "importance": 5,
+      "summary": "Attackers abused a flaw in the GoodCloud remote management service to push malware to devices, and cleaning them requires new firmware."
     },
     {
       "id": "https://www.securityweek.com/ai-inference-providers-failed-to-detect-hacking-and-prompt-theft-says-dragos/",
@@ -339,28 +447,52 @@
       "summary": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision…"
     },
     {
-      "id": "https://www.securityweek.com/whatsapp-fixes-flaw-uncovered-while-disrupting-scam-campaign/",
-      "title": "WhatsApp Fixes Flaw Uncovered While Disrupting Scam Campaign",
-      "url": "https://www.securityweek.com/whatsapp-fixes-flaw-uncovered-while-disrupting-scam-campaign/",
-      "source": "SecurityWeek",
-      "type": "news",
-      "published_at": "2026-11-20T16:01:02.000Z",
-      "content": "Tracked as CVE-2026-23871, the vulnerability was found by WhatsApp’s security team, and it may have been used to make scam messages more credible.\nThe post WhatsApp Fixes Flaw Uncovered While Disrupting Scam Campaign appeared first on SecurityWeek.",
-      "category": "Vulnerability",
-      "importance": 5,
-      "summary": "Tracked as CVE-2026-23871, the vulnerability was found by WhatsApp’s security team, and it may have been used to make scam messages more credible."
+      "id": "https://kitploit.com/en/tools/github/sclbd/deepfakebench-mm",
+      "title": "New tool: DeepfakeBench-MM",
+      "url": "https://kitploit.com/en/tools/github/sclbd/deepfakebench-mm",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-23T17:52:21.000Z",
+      "content": "Modular PyTorch benchmark for multimodal audio-visual deepfake detection, with dataset preprocessing, detector implementations, training, evaluation, and analysis pipelines.",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Modular PyTorch benchmark for multimodal audio-visual deepfake detection, with dataset preprocessing, detector implementations, training, evaluation, and analysis pipelines."
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/vendor-data-breach-exposes-chase-visa-mastercard-customer-info/",
-      "title": "Vendor data breach exposes Chase, Visa, Mastercard customer info",
-      "url": "https://www.bleepingcomputer.com/news/security/vendor-data-breach-exposes-chase-visa-mastercard-customer-info/",
-      "source": "BleepingComputer",
-      "type": "news",
-      "published_at": "2026-11-20T15:58:06.000Z",
-      "content": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data. [...]",
-      "category": "Breach/Incident",
-      "importance": 5,
-      "summary": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data."
+      "id": "https://kitploit.com/en/tools/github/shrave/delegated-scope-violation",
+      "title": "New tool: delegated-scope-violation",
+      "url": "https://kitploit.com/en/tools/github/shrave/delegated-scope-violation",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-23T15:51:12.000Z",
+      "content": "Research code, simulated multi-agent environments, and hash-chained event logs for studying delegated-scope violations in LLM agent systems, with offline reproduction of all reported results.",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Research code, simulated multi-agent environments, and hash-chained event logs for studying delegated-scope violations in LLM agent systems, with offline reproduction of all reported results."
+    },
+    {
+      "id": "https://kitploit.com/en/tools/github/cyberkristaps/libreosint",
+      "title": "New tool: libreOSINT",
+      "url": "https://kitploit.com/en/tools/github/cyberkristaps/libreosint",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-23T14:50:23.000Z",
+      "content": "Local-first OSINT graph workbench with built-in lookups and a local AI investigator.",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Local-first OSINT graph workbench with built-in lookups and a local AI investigator."
+    },
+    {
+      "id": "https://kitploit.com/en/tools/github/alienatedaliens/epistemic-guard",
+      "title": "New tool: epistemic-guard",
+      "url": "https://kitploit.com/en/tools/github/alienatedaliens/epistemic-guard",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-23T13:50:05.000Z",
+      "content": "Signed tool receipts, out-of-process MCP receipt proxy, Ed25519 memory write-gating, and RAG deduplication for agents (MIT)",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Signed tool receipts, out-of-process MCP receipt proxy, Ed25519 memory write-gating, and RAG deduplication for agents (MIT)"
     },
     {
       "id": "https://kitploit.com/en/posts/hermes-agent-d0612a48be021a94",
@@ -529,18 +661,6 @@
       "category": "Policy/Other",
       "importance": 4,
       "summary": "Signal has announced that it will restrict screenshots by default to stop artificial intelligence (AI) agents from reading private chats on Android and iOS devices, but conceded that the protection…"
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/bazuka-android-malware-uses-fake-screen.html",
-      "title": "Bazuka Android Malware Uses Fake Screen Overlays to Hide Credential Theft and Device Control",
-      "url": "https://thehackernews.com/2026/11/bazuka-android-malware-uses-fake-screen.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-20T16:58:16.000Z",
-      "content": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale.\n\nDutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan.\n\n\"Bazuka is a full malware framework,",
-      "category": "Malware/Ransomware",
-      "importance": 4,
-      "summary": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control…"
     },
     {
       "id": "https://kitploit.com/en/posts/bettercap-539ee050edfeff80",
@@ -769,42 +889,6 @@
       "category": "Tool",
       "importance": 3,
       "summary": "A modern graphical user interface based on SQLMap, providing intuitive and easy-to-use SQL injection detection and exploitation capabilities. While retaining SQLMap's powerful features, this GUI…"
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html",
-      "title": "WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams",
-      "url": "https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-20T17:57:20.000Z",
-      "content": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages.\n\nThe vulnerability, tracked as CVE-2026-23871 (CVSS score: 3.5), has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4.",
-      "category": "Vulnerability",
-      "importance": 3,
-      "summary": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability,…"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/gmh5225/sshlogcleaner",
-      "title": "New tool: SSHLogCleaner",
-      "url": "https://kitploit.com/en/tools/github/gmh5225/sshlogcleaner",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-20T17:13:31.000Z",
-      "content": "This script is designed to clean up SSH login-related logs on Linux systems",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "This script is designed to clean up SSH login-related logs on Linux systems"
-    },
-    {
-      "id": "https://kitploit.com/en/posts/trufflehog-4a7b1236c42aa9a6",
-      "title": "Release: trufflehog v3.100.0",
-      "url": "https://kitploit.com/en/posts/trufflehog-4a7b1236c42aa9a6",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-20T16:13:21.000Z",
-      "content": "Find, verify, and analyze leaked credentials",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "Find, verify, and analyze leaked credentials"
     }
   ]
 }
