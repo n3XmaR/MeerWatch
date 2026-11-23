@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-23T14:12:15.619Z",
-  "count": 70,
+  "generated_at": "2026-11-23T15:39:15.997Z",
+  "count": 67,
   "items": [
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
@@ -805,42 +805,6 @@
       "category": "Tool",
       "importance": 3,
       "summary": "Find, verify, and analyze leaked credentials"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/bishopfox/icsscanner",
-      "title": "New tool: icsScanner",
-      "url": "https://kitploit.com/en/tools/github/bishopfox/icsscanner",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-20T15:12:21.000Z",
-      "content": "A safety-first vulnerability scanner for ICS/OT protocols.",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "A safety-first vulnerability scanner for ICS/OT protocols."
-    },
-    {
-      "id": "https://www.securityweek.com/in-other-news-norwegian-energy-firm-cyberattacks-supercomputer-hack-new-nightmare-eclipse-exploit/",
-      "title": "In Other News: Norwegian Energy Firm Cyberattacks, Supercomputer Hack, New Nightmare Eclipse Exploit",
-      "url": "https://www.securityweek.com/in-other-news-norwegian-energy-firm-cyberattacks-supercomputer-hack-new-nightmare-eclipse-exploit/",
-      "source": "SecurityWeek",
-      "type": "news",
-      "published_at": "2026-11-20T14:56:23.000Z",
-      "content": "Noteworthy stories that might have slipped under the radar:  EU adds NoName057(16) to cyber sanctions list, malware targets CACs left in personal computers, Gemini agents targeted Epoch AI.\nThe post In Other News: Norwegian Energy Firm Cyberattacks, Supercomputer Hack, New Nightmare Eclipse Exploit appeared first on SecurityWeek.",
-      "category": "Malware/Ransomware",
-      "importance": 3,
-      "summary": "Noteworthy stories that might have slipped under the radar: EU adds NoName057(16) to cyber sanctions list, malware targets CACs left in personal computers, Gemini agents targeted Epoch AI."
-    },
-    {
-      "id": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
-      "title": "Still tracking company passwords in spreadsheets? You’re flying blind.",
-      "url": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
-      "source": "BleepingComputer",
-      "type": "news",
-      "published_at": "2026-11-20T15:00:10.000Z",
-      "content": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing. [...]",
-      "category": "Policy/Other",
-      "importance": 1,
-      "summary": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how…"
     }
   ]
 }
