@@ -1,4 +1,4 @@
-/* NeoPheme dashboard. Plain JS, no libraries.
+/* MeerWatch dashboard. Plain JS, no libraries.
    Security: data.json is untrusted. We never use innerHTML with it;
    all DOM is built with createElement + textContent. */
 "use strict";

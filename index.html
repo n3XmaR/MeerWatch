@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NeoPheme - Cybersecurity News Dashboard</title>
-  <meta name="description" content="NeoPheme: the last 3 days of cybersecurity news, research and vulnerabilities, ranked by importance.">
+  <title>MeerWatch - Cybersecurity News Dashboard</title>
+  <meta name="description" content="MeerWatch: the last 3 days of cybersecurity news, research and vulnerabilities, ranked by importance.">
   <meta name="theme-color" content="#050b1f">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050b1f'/%3E%3Cpath d='M3 16c4-6 9-8 13-8s9 2 13 8c-4 6-9 8-13 8S7 22 3 16z' fill='none' stroke='%2322d3ee' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23a855f7'/%3E%3C/svg%3E">
   <script>try{var t=localStorage.getItem("neopheme.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
@@ -14,12 +14,12 @@
   <a class="skip-link" href="#results">Skip to results</a>
 
   <header class="hero">
-    <img class="hero__img" src="assets/pheme.webp" alt="">
+    <img class="hero__img" src="assets/meerwatch.webp" alt="">
     <div class="hero__overlay"></div>
     <button type="button" class="theme-btn" id="theme-btn" aria-label="Change theme">Theme</button>
     <div class="hero__content">
       <div class="brand">
-        <svg class="logo" viewBox="0 0 64 40" role="img" aria-label="NeoPheme logo: winged eye with laurel">
+        <svg class="logo" viewBox="0 0 64 40" role="img" aria-label="MeerWatch logo: winged eye with laurel">
           <path d="M6 30C2 22 4 12 10 6M10 26C8 20 9 14 13 10" fill="none" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/>
           <path d="M58 30c4-8 2-18-4-24M54 26c2-6 1-12-3-16" fill="none" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/>
           <path d="M16 20c4-7 10-10 16-10s12 3 16 10c-4 7-10 10-16 10S20 27 16 20z" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
@@ -28,9 +28,9 @@
           <path d="M16 20L4 14M16 22L6 22M17 25L9 31" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"/>
           <path d="M48 20l12-6M48 22l10 0M47 25l8 6" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <h1 class="brand__name">Neo<span>Pheme</span></h1>
+        <h1 class="brand__name">Meer<span>Watch</span></h1>
       </div>
-      <p class="tagline">Pheme heard it first.</p>
+      <p class="tagline">Always on watch.</p>
       <p class="updated" id="updated" aria-live="polite">Last updated: loading…</p>
     </div>
   </header>
@@ -49,7 +49,7 @@
 
     <div id="empty-box" class="state" hidden>
       <h2>Nothing to show yet</h2>
-      <p>There are no items from the last 3 days. NeoPheme only keeps a rolling 3-day window and refreshes once a day, so check back after the next update.</p>
+      <p>There are no items from the last 3 days. MeerWatch only keeps a rolling 3-day window and refreshes once a day, so check back after the next update.</p>
     </div>
 
     <div id="loading" class="skeleton-grid" aria-label="Loading" role="status"></div>
@@ -126,7 +126,7 @@
 
   <div class="meander" aria-hidden="true"></div>
   <footer class="footer">
-    <p>NeoPheme - data collected daily from public security feeds.</p>
+    <p>MeerWatch - data collected daily from public security feeds.</p>
     <p class="muted">Importance scores and categories are rule-based, not AI-generated. Treat them as a guide, not a verdict.</p>
   </footer>
 
