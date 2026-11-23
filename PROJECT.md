@@ -1,66 +1,86 @@
 # NeoPheme
 
-Personal cybersecurity news dashboard. n8n collects news every morning, rule-based scoring ranks it, and a static web dashboard displays it. AI and a chat assistant are optional later additions.
+Personal cybersecurity news dashboard. n8n collects news every morning, rule-based scoring ranks it, and a static web dashboard (GitHub Pages) displays it. AI and a chat assistant are optional later additions.
 
 - **Name:** Pheme (Greek goddess of rumor/fame/news) + Neo (new).
 - **Identity:** cyber look, cyan/purple on dark blue, Greek laurel + winged-eye motif.
-- **Goal:** the project is educational. I build, the assistant guides and explains WHY.
+- **Goal:** the project is educational for the n8n/automation side. I build the n8n parts, the assistant guides and explains WHY.
 - **Purpose:** stay current on important news, research and NEW tools from well-known vendors/platforms, so I don't learn about notable tools late.
 
 ## Environment
 
 - OS: Windows. RAM is limited (Docker/WSL capped at 2GB via `C:\Users\zxamm\.wslconfig`).
 - Repo: `C:\Dev\NeoPheme` (outside OneDrive on purpose). GitHub: `n3XmaR/NeoPheme` (currently PUBLIC).
+- gh-pages worktree: `C:\Dev\NeoPheme-pages` (separate folder for the `gh-pages` branch; never `git checkout gh-pages` inside `C:\Dev\NeoPheme`).
 - n8n runs in Docker (`n8n/docker-compose.yml` + `n8n/.env`), http://localhost:5678, timezone Asia/Amman.
 - Telegram is blocked in Jordan, so no Telegram bot. Output is a website.
 - Everything important lives in files (repo + this PROJECT.md + docs/phase-*.md), so any chat or account can resume from them.
 
 ## Key Decisions
 
-- Automation: n8n in Docker locally first; a VPS is optional later.
+- Automation: n8n in Docker locally first; a VPS is optional later. Missed runs are not replayed: if the PC/Docker was off at 07:00, run Collection then Export manually, in that order.
 - No AI for now: category/importance/summary come from rules in a Code node. AI (Gemini free, maybe Claude Haiku) can be added later using the same columns.
-- No webhooks/API for data: n8n commits `data.json` to GitHub (fine-grained GitHub token stored only in n8n Credentials). The dashboard reads that static file. n8n is never exposed to the internet. A token inside front-end JS is not secret, so we avoid it.
-- Hosting: GitHub Pages is free only while the repo is PUBLIC (a private repo needs a paid plan). If the repo goes private again, use a separate public dashboard repo or Cloudflare Pages / Netlify. Branch layout (e.g. `gh-pages` branch holding the dashboard + data.json) is decided in Phase 6.
-- Schedule: once a day at 07:00. If the PC was off, press Execute manually (dedupe prevents duplicates). No dashboard refresh button.
+- One workflow "NeoPheme - Collection", two independent chains: Schedule 07:00 (collection: Cleanup -> Read Stored -> 8 sources -> Merge -> filter -> dedupe -> Find New Items -> Score Items -> Store) and Schedule 07:15 (export: Read For Export -> Build data.json -> GitHub). The export reads the table, so it runs even on days with no new items and the 3-day window keeps moving.
+- Hosting: GitHub Pages from the orphan branch `gh-pages` (root). n8n commits ONLY `data.json` there; `main` stays clean. The dashboard is published to the same branch root by manually copying the contents of `dashboard/` through a git worktree (no GitHub Action), never deleting `data.json`. GitHub Pages is free only while the repo is PUBLIC.
+- GitHub token: fine-grained, `NeoPheme` only, Contents read/write, stored only in n8n Credentials, expires about 2027-02-21.
+- Public data URL: https://n3xmar.github.io/NeoPheme/data.json
+- No webhooks/API: the dashboard reads the static file by relative path (no CORS). n8n is never exposed to the internet. Tokens in front-end JS are not secret, so none are used there.
+- Dashboard front-end: I do NOT want to learn front-end now. The assistant writes the complete dashboard files (dashboard/ on main); I only review, give feedback, and commit.
+- Schedule: once a day. No dashboard refresh button.
 - Language: dashboard UI and summaries in English only (LTR). If a chat assistant is added later it replies in the user's language (Arabic or English), technical terms in English.
-- Storage: n8n Data Table `neopheme_items` as a short rolling window. The collection filter keeps 3 days (by `published_at`); cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive.
-- Scoring: one Code node "Score Items" between Find New Items ("In A only") and Store New Items. All rules live in a CONFIG object at the top of the node (base score per source, boosts, penalties, recency, categories). Scoring only runs on new items, so each item is scored once and every stored row has category/importance/summary.
-- Categories are fixed: Exploit/Zero-day, Malware/Ransomware, Breach/Incident, Vulnerability, Research, Tool, Policy/Other. CISA KEV is always Exploit/Zero-day. Promos get importance 1 (no Promo category).
-- Cross-source duplicate boost/grouping is deferred (needs cross-item comparison).
-- Reddit is not a source (RSS ended 2026-11-13; public API closing March 2027).
-- GitHub tool discovery is deferred to Phase 10 (needs a trusted-org allowlist or `releases.atom` feeds, a longer window, ~8-day retention for tools). The old `topic:security` query was removed (spam and fake stars).
+- Storage: n8n Data Table `neopheme_items` as a short rolling window. Collection filter keeps 3 days (by `published_at`); Cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive.
+- Scoring: one Code node "Score Items" between Find New Items ("In A only") and Store New Items. All rules live in a CONFIG object at the top (base score per source, boosts, penalties, recency, categories). Scoring only runs on new items. Categories are fixed: Exploit/Zero-day, Malware/Ransomware, Breach/Incident, Vulnerability, Research, Tool, Policy/Other. CISA KEV is always Exploit/Zero-day. Promos get importance 1.
+- Error handling: source Fetch nodes use Continue (using error output, unconnected). Read For Export and the GitHub node use Stop Workflow (never publish a partial file). Read For Export uses Return All (default limit 50 truncates silently).
+- Cross-source duplicate boost/grouping is deferred (e.g. the same zero-day appears in 3 outlets).
+- Reddit is not a source (RSS ended 2026-11-13). GitHub tool discovery is deferred to Phase 10 (allowlist or releases.atom feeds, longer window).
 - Never disable nodes (a disabled node still passes items through); delete them instead.
-- "Read Stored Items" uses Always Output Data, so on an empty table it returns one empty item. That is expected and harmless; exports must ignore rows with empty `item_id`.
+- "Read Stored Items" uses Always Output Data + Execute Once; on an empty table it returns one empty item (expected, harmless).
 
-## Normalized Item Schema
+## data.json (published on gh-pages)
 
 ```json
 {
-  "id": "unique id (the link/URL)",
-  "title": "...",
-  "url": "...",
-  "source": "BleepingComputer",
-  "type": "news | vuln | tool | video | research",
-  "published_at": "ISO 8601 (UTC)",
-  "content": "snippet/description (max ~500 chars)",
-  "category": "one of the 7 fixed categories",
-  "importance": 1,
-  "summary": "cleaned first ~200 chars of content (may end with …)"
+  "generated_at": "2026-11-24T04:15:00.000Z",
+  "count": 38,
+  "items": [
+    {
+      "id": "https://... (the item URL)",
+      "title": "...",
+      "url": "...",
+      "source": "BleepingComputer",
+      "type": "news | vuln | research | tool | video",
+      "published_at": "ISO 8601 UTC (.000Z)",
+      "content": "snippet (may contain newlines and [...])",
+      "category": "Exploit/Zero-day | Malware/Ransomware | Breach/Incident | Vulnerability | Research | Tool | Policy/Other",
+      "importance": 1,
+      "summary": "cleaned ~200 chars, may end with …"
+    }
+  ]
 }
 ```
 
-> `category`, `importance`, `summary` are added by the Score Items node. `type` values currently produced: news, vuln, research.
-> Data Table columns: item_id, title, url, source, type, published_at, content, category (String), importance (Number), summary (String), plus n8n's internal id, createdAt, updatedAt. The item `id` is stored as `item_id`.
+- Items are sorted by importance desc, then published_at desc, but the dashboard must sort explicitly. Only the last 3 days (by published_at) are included. Rows with empty item_id are dropped.
+- Feed text is untrusted: render with textContent, not innerHTML. Use `summary` for cards.
+- Fetch with a cache-busting query (Pages CDN can serve an old copy for ~10 minutes). Empty `items` means "no items in the last 3 days"; a failed fetch needs a clear error state with retry.
+- Data Table columns: item_id, title, url, source, type, published_at, content, category (String), importance (Number), summary (String), plus n8n's id, createdAt, updatedAt.
+
+## Dashboard
+
+- Source: `dashboard/` on main (`index.html`, `css/style.css`, `js/app.js`, `assets/pheme.webp`). Plain HTML/CSS/JS, no build step. Details: `docs/phase-7.md`.
+- Published by copying the contents of `dashboard/` to the root of `gh-pages` via the git worktree at `C:\Dev\NeoPheme-pages`. Never delete `data.json` there. Add files by name, never `git add .`. Before each deploy: `git -C C:\Dev\NeoPheme-pages pull` (n8n commits to that branch daily).
+- Local test: run `python -m http.server 8000` INSIDE `dashboard\` (not the repo root). On localhost it reads the live data.json from GitHub Pages.
+- Image is WebP (about 0.2MB). Do not commit the original 2.3MB PNG (the repo is public and history is permanent).
+- Settings live in the `CONFIG` object at the top of `app.js`; colors are CSS variables on `:root` in `style.css`.
+- The stale banner text in `index.html` says "36 hours" in plain text. If `CONFIG.STALE_HOURS` changes, edit that text too.
 
 ## Sources (8 Merge inputs)
 
 - news (RSS): BleepingComputer, The Hacker News, Krebs on Security, SecurityWeek
 - vuln: CISA KEV (HTTP + Split Out; `dateAdded` has no time so T00:00Z; filtered to last 3 days BEFORE the Merge)
-- research (RSS): Cisco Talos, PortSwigger Research, SANS ISC (Stormcast podcast entries filtered out)
-- Removed: YouTube (John Hammond), Dark Reading (overlap), old GitHub query.
-- Not available: Reddit.
-- Candidates, unverified (open the feed in a browser and read the content first): Microsoft MSRC, Google Project Zero, Schneier, GitHub releases.atom feeds for known tools.
-- Adding a source: copy a Fetch + Normalize pair, change URL and `source`, add a Merge input, and add its base score in the CONFIG of Score Items. A source with 0 items after the 3-day filter can be legitimate.
+- research (RSS): Cisco Talos, PortSwigger Research, SANS ISC (Stormcast filtered out)
+- Removed: YouTube, Dark Reading, old GitHub query. Not available: Reddit.
+- Candidates, unverified (open the feed in a browser first): Microsoft MSRC, Google Project Zero, Schneier, GitHub releases.atom feeds.
+- Adding a source: copy a Fetch + Normalize pair, change URL and `source`, add a Merge input, add its base score in the Score Items CONFIG.
 
 ## Phases
 
@@ -68,57 +88,52 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 |---|---|---|
 | 0 | Setup (repo, VS Code, Docker) | done |
 | 1 | n8n basics | done |
-| 2 | Collection (normalize, merge, filter, dedupe) | done |
-| 2b | More sources: research/vendor blogs (Talos, PortSwigger, SANS) | done |
-| 3 | Storage + cross-day dedupe (Data Table, 3-day window) | done |
-| 4 | Scoring WITHOUT AI (category, importance 1-10, summary) | done |
-| 5 | Schedule (daily 07:00) + error handling (Continue on Fail) + Cleanup before Read | next |
-| 6 | Export `data.json` to GitHub (n8n GitHub node, token in n8n Credentials) | |
-| 7 | Dashboard (HTML/CSS/JS, NeoPheme identity) reads data.json, GitHub Pages | |
+| 2 | Collection | done |
+| 2b | More sources (Talos, PortSwigger, SANS) | done |
+| 3 | Storage + cross-day dedupe | done |
+| 4 | Scoring without AI | done |
+| 5 | Schedule + error handling | done (verify first scheduled run 2026-11-24) |
+| 6 | Export data.json to GitHub (gh-pages) | done |
+| 7 | Dashboard (assistant writes it fully), published on GitHub Pages | done locally, publishing to gh-pages next |
 | 8 | Optional: AI scoring/summaries + chat | |
 | 9 | Optional: move n8n to a VPS (HTTPS, Cloudflare Access, backups) | |
-| 10 | Improvements (GitHub tool discovery via allowlist/releases.atom, more sources, duplicate grouping, weekly digest) | |
-
-Phases 5 and 6 can share one chat (5 is short and 6 depends on it).
+| 10 | Improvements (GitHub tool discovery, more sources, duplicate grouping, longer window for high-importance items, weekly digest) | |
 
 ## Workflow Files
 
-- `workflows/01-collection.json`: Phase 2 archive. Superseded.
-- `workflows/02-storage.json`: Phase 3 workflow. Superseded.
-- `workflows/02b-sources.json`: Phase 2b workflow. Superseded.
-- `workflows/03-scoring.json`: Phase 4 workflow (Score Items node). Current.
-- Docs: `docs/phase-3.md`, `docs/phase-2b.md`, `docs/phase-4.md`.
-
-## Phase 5/6 Notes (from Phase 4)
-
-- Wire Cleanup Old Rows -> Read Stored Items sequentially (not parallel).
-- Continue On Fail on each source Fetch node (and on Store New Items / the future GitHub export node).
-- Optional hardening: per-item try/catch in Score Items with fallback `category: 'Policy/Other'`, `importance: 4`, `summary: ''`.
-- Recency boost depends on run time (a later manual run gives fewer +1 boosts).
-- Export from the stored table after Cleanup: map `item_id` -> `id`, drop internal columns, ignore empty `item_id`, filter to the last 3 days by `published_at`, do not rely on row order (dashboard sorts by importance desc, then published_at desc).
+- `workflows/04-schedule-export.json`: Phase 5-6 workflow. Current.
+- `workflows/01-collection.json`, `02-storage.json`, `02b-sources.json`, `03-scoring.json`: Superseded.
+- Docs: `docs/phase-2b.md`, `docs/phase-3.md`, `docs/phase-4.md`, `docs/phase-5-6.md`, `docs/phase-7.md`.
+- `data.json` lives on branch `gh-pages`, written by n8n. Never hand-edit it.
 
 ## Open Tasks
 
-- Before every push: credentials scan (expected false positive: `password` inside the `1password` regex), commit only named files.
-- Verify Cleanup deletes genuinely old rows (check on 2026-11-26).
+- Publish the dashboard to `gh-pages` (worktree copy), then verify the live site: no 404s in DevTools Network, `data.json` loaded from its own origin, filters work, mobile looks right.
+- Verify the first scheduled runs on 2026-11-24 (Executions + commit `data 2026-11-24` on gh-pages, and that `generated_at` updates on the live dashboard).
+- Verify Cleanup around 2026-11-28 (the table was cleared on 2026-11-23, so no row is older than 4 days before then).
+- Renew the GitHub token before about 2027-02-21.
+- Confirm Workflow timezone = Asia/Amman and executions are saved.
+- Idea: set KEV `published_at` to end of day (T23:59:59Z) so KEV items do not expire earlier than news.
+- Known scoring misses: Cisco Expressway-type items tagged Breach/Incident; scores saturate at 10 on busy days; optional per-item try/catch in Score Items.
 - Test scoring on real CISA KEV, PortSwigger and Talos items when they appear.
-- Known scoring misses: Cisco Expressway-type items tagged Breach/Incident (idea: add `exploiting a (critical )?flaw` to the Exploit rule); scores saturate at 10 on busy days.
-- Review n8n 3.0 Migration Report; pin the n8n image version in docker-compose before deploy.
-- Phase 6-7: confirm hosting/branch layout.
-- Optional sources (Schneier, MSRC, Project Zero): verify first.
+- Review n8n 3.0 Migration Report; pin the n8n image version in docker-compose.
 - Back up `N8N_ENCRYPTION_KEY` outside the repo.
+- Dashboard limitations (optional later): Top threats items repeat in the main grid, stats ignore filters, no `hashchange` listener, optional calmer theme.
 
 ## Working Style
 
 - One chat per phase (or two small related phases). This main chat holds decisions and the plan.
-- Guide in medium-sized steps (about 3 related steps per reply), explain WHY briefly.
+- Guide in medium-sized steps (about 3 related steps per reply), explain WHY briefly. Exception: Phase 7 front-end, the assistant writes the full files.
 - Reply in Arabic (Jordanian dialect OK), keep technical terms in English.
 - At the end of each phase, summarize: what we built, decisions, problems and fixes, files to save, what the next phase needs.
-- Exception: Phase 7 (Dashboard front-end). I do NOT want to learn front-end now. The assistant writes the complete dashboard files (index.html, style.css, app.js in dashboard/); I only review, give feedback, and commit.
 
 ## Security Rules
 
 - Never commit `.env`, API keys, GitHub tokens, or `N8N_ENCRYPTION_KEY`. The repo is PUBLIC.
 - Before every commit run, in `C:\Dev\NeoPheme`:
-  `Select-String -Path workflows\*.json -Pattern 'credentials','token','Authorization','Bearer','apiKey','password','secret'` and check any hit is a known false positive, then `git status`.
+  `Select-String -Path workflows\*.json -Pattern 'credentials','token','Authorization','Bearer','apiKey','password','secret','ghp_','github_pat_'`
+  Known false positives: `password` inside the `1password` regex (jsCode line) and the GitHub node's `"credentials": {` reference (id + name only). Then `git status`, and add files by name.
+- For dashboard commits also run:
+  `Select-String -Path dashboard\js\*.js,dashboard\index.html -Pattern 'token','ghp_','github_pat_','apiKey','Bearer','secret'` (expected: no output).
+- Never `git add .` on any branch. On gh-pages work only in `C:\Dev\NeoPheme-pages`.
 - Never run or download repos from GitHub results without reviewing them first.
