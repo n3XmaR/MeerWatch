@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-23T11:26:30.190Z",
-  "count": 38,
+  "generated_at": "2026-11-23T12:05:38.200Z",
+  "count": 40,
   "items": [
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
@@ -75,6 +75,18 @@
       "summary": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application."
     },
     {
+      "id": "https://www.securityweek.com/badbox-3-0-ad-fraud-operation-generating-40-billion-daily-bid-requests-disrupted/",
+      "title": "BadBox 3.0 Ad Fraud Operation Generating 40 Billion Daily Bid Requests Disrupted",
+      "url": "https://www.securityweek.com/badbox-3-0-ad-fraud-operation-generating-40-billion-daily-bid-requests-disrupted/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T11:44:18.000Z",
+      "content": "Backdoors on low-cost consumer devices served modules for ad fraud and for turning devices into residential proxies. \nThe post BadBox 3.0 Ad Fraud Operation Generating 40 Billion Daily Bid Requests Disrupted appeared first on SecurityWeek.",
+      "category": "Malware/Ransomware",
+      "importance": 6,
+      "summary": "Backdoors on low-cost consumer devices served modules for ad fraud and for turning devices into residential proxies."
+    },
+    {
       "id": "https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/",
       "title": "Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/",
@@ -133,6 +145,42 @@
       "category": "Malware/Ransomware",
       "importance": 6,
       "summary": "The chief technology officer and co-founder of ransomwarehelp.com, a six year old Florida business that claimed to use \"advanced cryptographic tools\" to restore data locked by ransomware, has been…"
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/call-center-operator-gets-8-years-for-helping-scam-30-000-americans/",
+      "title": "Call center operator gets 8 years for helping scam 30,000 Americans",
+      "url": "https://www.bleepingcomputer.com/news/security/call-center-operator-gets-8-years-for-helping-scam-30-000-americans/",
+      "source": "BleepingComputer",
+      "type": "news",
+      "published_at": "2026-11-23T12:02:23.000Z",
+      "content": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme. [...]",
+      "category": "Policy/Other",
+      "importance": 5,
+      "summary": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud…"
+    },
+    {
+      "id": "https://www.securityweek.com/sap-netweaver-cisco-expressway-flaws-exploited-in-attacks/",
+      "title": "SAP NetWeaver, Cisco Expressway Flaws Exploited in Attacks",
+      "url": "https://www.securityweek.com/sap-netweaver-cisco-expressway-flaws-exploited-in-attacks/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T11:35:15.000Z",
+      "content": "Threat actors could exploit them to leak or modify server information and to execute commands as root.\nThe post SAP NetWeaver, Cisco Expressway Flaws Exploited in Attacks appeared first on SecurityWeek.",
+      "category": "Vulnerability",
+      "importance": 5,
+      "summary": "Threat actors could exploit them to leak or modify server information and to execute commands as root."
+    },
+    {
+      "id": "https://www.securityweek.com/crowdstrike-to-acquire-zscaler-in-43-9-billion-deal/",
+      "title": "CrowdStrike to Acquire Zscaler in $43.9 Billion Deal",
+      "url": "https://www.securityweek.com/crowdstrike-to-acquire-zscaler-in-43-9-billion-deal/",
+      "source": "SecurityWeek",
+      "type": "news",
+      "published_at": "2026-11-23T11:31:44.000Z",
+      "content": "CrowdStrike expects the combined company to have more than $10 billion in annual recurring revenue.\nThe post CrowdStrike to Acquire Zscaler in $43.9 Billion Deal appeared first on SecurityWeek.",
+      "category": "Policy/Other",
+      "importance": 5,
+      "summary": "CrowdStrike expects the combined company to have more than $10 billion in annual recurring revenue."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/",
@@ -291,18 +339,6 @@
       "summary": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server,…"
     },
     {
-      "id": "https://www.securityweek.com/sbc-medical-group-data-breach-impacts-over-2-million/",
-      "title": "SBC Medical Group Data Breach Impacts Over 2 Million",
-      "url": "https://www.securityweek.com/sbc-medical-group-data-breach-impacts-over-2-million/",
-      "source": "SecurityWeek",
-      "type": "news",
-      "published_at": "2026-11-20T11:36:51.000Z",
-      "content": "Threat actors accessed databases containing customer information associated with clinics in Japan.\nThe post SBC Medical Group Data Breach Impacts Over 2 Million appeared first on SecurityWeek.",
-      "category": "Breach/Incident",
-      "importance": 5,
-      "summary": "Threat actors accessed databases containing customer information associated with clinics in Japan."
-    },
-    {
       "id": "https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html",
       "title": "OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms",
       "url": "https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html",
@@ -433,18 +469,6 @@
       "category": "Vulnerability",
       "importance": 3,
       "summary": "Experts commented on whether AI-accelerated patching played a role, the need for tested rollback plans, and the fragility of interconnected systems."
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/the-path-to-ai-autonomy-in-soc.html",
-      "title": "The Path to AI Autonomy in the SOC",
-      "url": "https://thehackernews.com/2026/11/the-path-to-ai-autonomy-in-soc.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-20T12:00:00.000Z",
-      "content": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027.\n\nThe pressure",
-      "category": "Policy/Other",
-      "importance": 3,
-      "summary": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI…"
     },
     {
       "id": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
