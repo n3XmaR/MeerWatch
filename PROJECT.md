@@ -21,17 +21,18 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 - Automation: n8n in Docker locally first; a VPS is optional later. Missed runs are not replayed: if the PC/Docker was off at 07:00, run Collection then Export manually, in that order.
 - No AI for now: category/importance/summary come from rules in a Code node. AI (Gemini free, maybe Claude Haiku) can be added later using the same columns.
 - One workflow "NeoPheme - Collection", two independent chains: Schedule 07:00 (collection: Cleanup -> Read Stored -> 8 sources -> Merge -> filter -> dedupe -> Find New Items -> Score Items -> Store) and Schedule 07:15 (export: Read For Export -> Build data.json -> GitHub). The export reads the table, so it runs even on days with no new items and the 3-day window keeps moving.
-- Hosting: GitHub Pages from the orphan branch `gh-pages` (root). n8n commits ONLY `data.json` there; `main` stays clean. The dashboard is published to the same branch root by manually copying the contents of `dashboard/` through a git worktree (no GitHub Action), never deleting `data.json`. GitHub Pages is free only while the repo is PUBLIC.
+- Hosting: GitHub Pages from the orphan branch `gh-pages` (root). n8n commits ONLY `data.json` there; `main` stays clean. The dashboard is published to the same branch root by manually copying changed files from `dashboard/` through a git worktree (no GitHub Action), never deleting `data.json`. GitHub Pages is free only while the repo is PUBLIC.
 - GitHub token: fine-grained, `NeoPheme` only, Contents read/write, stored only in n8n Credentials, expires about 2027-02-21.
 - Public data URL: https://n3xmar.github.io/NeoPheme/data.json
+- Live site: https://n3xmar.github.io/NeoPheme/
 - No webhooks/API: the dashboard reads the static file by relative path (no CORS). n8n is never exposed to the internet. Tokens in front-end JS are not secret, so none are used there.
-- Dashboard front-end: I do NOT want to learn front-end now. The assistant writes the complete dashboard files (dashboard/ on main); I only review, give feedback, and commit.
+- Dashboard front-end: I do NOT want to learn front-end now. The assistant writes the complete dashboard files (dashboard/ on main); I only review, give feedback, and commit. Small tweaks (like hero size) are done by editing a few CSS variables.
 - Schedule: once a day. No dashboard refresh button.
 - Language: dashboard UI and summaries in English only (LTR). If a chat assistant is added later it replies in the user's language (Arabic or English), technical terms in English.
 - Storage: n8n Data Table `neopheme_items` as a short rolling window. Collection filter keeps 3 days (by `published_at`); Cleanup deletes rows older than 4 days (by `createdAt`) so the table always remembers an item longer than the filter can return it. No permanent archive.
 - Scoring: one Code node "Score Items" between Find New Items ("In A only") and Store New Items. All rules live in a CONFIG object at the top (base score per source, boosts, penalties, recency, categories). Scoring only runs on new items. Categories are fixed: Exploit/Zero-day, Malware/Ransomware, Breach/Incident, Vulnerability, Research, Tool, Policy/Other. CISA KEV is always Exploit/Zero-day. Promos get importance 1.
 - Error handling: source Fetch nodes use Continue (using error output, unconnected). Read For Export and the GitHub node use Stop Workflow (never publish a partial file). Read For Export uses Return All (default limit 50 truncates silently).
-- Cross-source duplicate boost/grouping is deferred (e.g. the same zero-day appears in 3 outlets).
+- Duplicate grouping (the same story in several outlets) is done client-side in the dashboard (same CVE id, or title word overlap; tunable with `GROUP_SIMILARITY` and `GROUP_MIN_SHARED_WORDS` in `CONFIG`; shown as "Also reported by"). A score boost for stories seen in 2+ sources and server-side grouping in n8n are still deferred to Phase 10.
 - Reddit is not a source (RSS ended 2026-11-13). GitHub tool discovery is deferred to Phase 10 (allowlist or releases.atom feeds, longer window).
 - Never disable nodes (a disabled node still passes items through); delete them instead.
 - "Read Stored Items" uses Always Output Data + Execute Once; on an empty table it returns one empty item (expected, harmless).
@@ -67,8 +68,10 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 ## Dashboard
 
 - Source: `dashboard/` on main (`index.html`, `css/style.css`, `js/app.js`, `assets/pheme.webp`). Plain HTML/CSS/JS, no build step. Details: `docs/phase-7.md`.
-- Published by copying the contents of `dashboard/` to the root of `gh-pages` via the git worktree at `C:\Dev\NeoPheme-pages`. Never delete `data.json` there. Add files by name, never `git add .`. Before each deploy: `git -C C:\Dev\NeoPheme-pages pull` (n8n commits to that branch daily).
-- Local test: run `python -m http.server 8000` INSIDE `dashboard\` (not the repo root). On localhost it reads the live data.json from GitHub Pages.
+- v2 features: three themes (Neon default, Calm, Light), save (star) and hide (X) buttons with a restore button, All/New/Saved view, NEW tag, day headings (when sorted by date), and duplicate grouping ("Also reported by"). Saved/hidden/seen/theme live in localStorage of each browser only (keys `neopheme.v1`, `neopheme.theme`). Details: `docs/phase-7.md`.
+- Hero size: two variables at the top of `style.css` `:root`: `--hero-height` (currently `clamp(300px, 30vw, 470px)`) and `--hero-focus` (`50% 0%`, keeps the head and wings visible). Phones (max-width 640px) override them in a media query.
+- Published by copying changed files from `dashboard/` to the root of `gh-pages` via the git worktree at `C:\Dev\NeoPheme-pages`. Never delete `data.json` there. Add files by name, never `git add .`. Before each deploy: `git -C C:\Dev\NeoPheme-pages pull` (n8n commits to that branch daily). Full steps are in `docs/phase-7.md`.
+- Local test: run `python -m http.server 8000` INSIDE `C:\Dev\NeoPheme\dashboard` (not the repo root, and NOT `NeoPheme-pages`, which is the published copy). On localhost it reads the live data.json from GitHub Pages. Hard-refresh with Ctrl+Shift+R.
 - Image is WebP (about 0.2MB). Do not commit the original 2.3MB PNG (the repo is public and history is permanent).
 - Settings live in the `CONFIG` object at the top of `app.js`; colors are CSS variables on `:root` in `style.css`.
 - The stale banner text in `index.html` says "36 hours" in plain text. If `CONFIG.STALE_HOURS` changes, edit that text too.
@@ -94,10 +97,10 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 | 4 | Scoring without AI | done |
 | 5 | Schedule + error handling | done (verify first scheduled run 2026-11-24) |
 | 6 | Export data.json to GitHub (gh-pages) | done |
-| 7 | Dashboard (assistant writes it fully), published on GitHub Pages | done locally, publishing to gh-pages next |
+| 7 | Dashboard (assistant writes it fully), published on GitHub Pages | done, v2 published 2026-11-23 (verify live site) |
 | 8 | Optional: AI scoring/summaries + chat | |
 | 9 | Optional: move n8n to a VPS (HTTPS, Cloudflare Access, backups) | |
-| 10 | Improvements (GitHub tool discovery, more sources, duplicate grouping, longer window for high-importance items, weekly digest) | |
+| 10 | Improvements (GitHub tool discovery, more sources, server-side duplicate grouping and score boost, longer window for high-importance items, weekly digest) | |
 
 ## Workflow Files
 
@@ -108,7 +111,7 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 
 ## Open Tasks
 
-- Publish the dashboard to `gh-pages` (worktree copy), then verify the live site: no 404s in DevTools Network, `data.json` loaded from its own origin, filters work, mobile looks right.
+- Verify the live site after the v2 publish: no 404s in DevTools Network, `data.json` loaded from its own origin, filters, themes, save/hide/restore, mobile look.
 - Verify the first scheduled runs on 2026-11-24 (Executions + commit `data 2026-11-24` on gh-pages, and that `generated_at` updates on the live dashboard).
 - Verify Cleanup around 2026-11-28 (the table was cleared on 2026-11-23, so no row is older than 4 days before then).
 - Renew the GitHub token before about 2027-02-21.
@@ -118,7 +121,8 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 - Test scoring on real CISA KEV, PortSwigger and Talos items when they appear.
 - Review n8n 3.0 Migration Report; pin the n8n image version in docker-compose.
 - Back up `N8N_ENCRYPTION_KEY` outside the repo.
-- Dashboard limitations (optional later): Top threats items repeat in the main grid, stats ignore filters, no `hashchange` listener, optional calmer theme.
+- Add `.gitignore` (n8n/) on gh-pages.
+- Dashboard limitations (optional later): stats ignore filters and hidden stories, no `hashchange` listener, grouping is title-word based, saved/hidden state is per browser (no sync).
 
 ## Working Style
 
@@ -130,10 +134,11 @@ Personal cybersecurity news dashboard. n8n collects news every morning, rule-bas
 ## Security Rules
 
 - Never commit `.env`, API keys, GitHub tokens, or `N8N_ENCRYPTION_KEY`. The repo is PUBLIC.
-- Before every commit run, in `C:\Dev\NeoPheme`:
+- Run all scans from `C:\Dev\NeoPheme` (not from inside `dashboard\`). Before every commit run:
   `Select-String -Path workflows\*.json -Pattern 'credentials','token','Authorization','Bearer','apiKey','password','secret','ghp_','github_pat_'`
   Known false positives: `password` inside the `1password` regex (jsCode line) and the GitHub node's `"credentials": {` reference (id + name only). Then `git status`, and add files by name.
 - For dashboard commits also run:
-  `Select-String -Path dashboard\js\*.js,dashboard\index.html -Pattern 'token','ghp_','github_pat_','apiKey','Bearer','secret'` (expected: no output).
+  `Select-String -Path dashboard\js\*.js,dashboard\index.html -Pattern 'token','ghp_','github_pat_','apiKey','Bearer','secret'`
+  Known false positives: `tokens` in `app.js` (title words for duplicate grouping, 3 lines). Anything else is a problem.
 - Never `git add .` on any branch. On gh-pages work only in `C:\Dev\NeoPheme-pages`.
 - Never run or download repos from GitHub results without reviewing them first.

@@ -7,108 +7,108 @@
 ```
 dashboard/
 ├── index.html      page structure, inline SVG favicon, inline SVG logo, loads css/style.css and js/app.js
-├── css/style.css   palette (CSS variables on :root), layout, cards, hero, states, responsive rules
-├── js/app.js       CONFIG, data loading, normalization, filtering, sorting, rendering, URL hash
+├── css/style.css   palette (CSS variables on :root), layout, cards, hero, themes, states, responsive rules
+├── js/app.js       CONFIG, data loading, normalization, filtering, sorting, grouping, rendering, URL hash
 └── assets/pheme.webp   mascot image (placed manually by me, not generated)
 ```
 
-**Features implemented**
-- **Hero:** mascot image (`object-position: 50% 28%`, 50% 22% on phones), dark gradient overlay, inline SVG logo (winged eye + laurel), "NeoPheme" title, tagline, and "Last updated: <local time> | <n> items". CSS gradient fallback if the image fails.
+Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/NeoPheme/
+
+**Features implemented (v1)**
+- **Hero:** mascot image, dark gradient overlay, inline SVG logo (winged eye + laurel), "NeoPheme" title, tagline ("Pheme heard it first."), and "Last updated: <local time> | <n> items". CSS gradient fallback if the image fails.
 - **Meander (Greek key) border:** CSS data-URI SVG under the hero and above the footer.
 - **Stats strip:** total items, high-importance count (importance >= 8), top category with its count, number of sources. Computed on all items, not on the filtered view.
-- **Top threats:** the 3 highest-importance items as larger cards. Shown only when no filter is active (default sort, empty search, no category/source/type, min = All).
-- **Controls:** text search (title + summary, 150 ms debounce), category / source / type dropdowns (built dynamically from the data, with counts, sorted alphabetically), minimum importance buttons (All / 5+ / 7+ / 9+), sort (Importance, Newest, Oldest), Reset filters, and "Showing X of Y items".
+- **Top threats:** the 3 highest-importance items as larger cards. Shown only when no filter is active.
+- **Controls:** text search (title + summary, 150 ms debounce), category / source / type dropdowns (built from the data, with counts), minimum importance buttons (All / 5+ / 7+ / 9+), sort (Importance, Newest, Oldest), Reset filters, and "Showing X of Y items".
 - **Cards:** importance badge, category chip (color per category), title as link, summary, source, type label, relative time with exact local time in the tooltip.
-- **States:**
-  - Loading: 6 skeleton placeholders.
-  - Error: message plus Retry button.
-  - Empty: friendly message explaining the 3-day window.
-  - No matches: shown when filters return nothing.
-  - Stale: warning banner.
-- **Accessibility:** skip link, labelled controls, `aria-pressed` on the importance buttons, `aria-live` on the count and updated line, focus-visible outlines, `prefers-reduced-motion` support, semantic HTML.
+- **States:** loading skeletons, error + Retry, empty (3-day window message), no matches, stale warning banner.
+- **Accessibility:** skip link, labelled controls, `aria-pressed` on toggle buttons, `aria-live` on count and updated line, focus-visible outlines, `prefers-reduced-motion`, semantic HTML.
 - **Footer:** credit line plus a note that scoring is rule-based.
 
-**How data is loaded**
-- `CONFIG.DATA_URL = "data.json"` (relative) is used in production.
-- `CONFIG.DATA_URL_LOCAL_TEST = "https://n3xmar.github.io/NeoPheme/data.json"` is used when `location.protocol === "file:"` or the hostname is `localhost` or `127.0.0.1`.
-- Every fetch appends `?t=Date.now()` and uses `cache: "no-store"`.
-- The load fails with an error if the response is not OK or `items` is not an array.
-- Stale threshold: `CONFIG.STALE_HOURS = 36`. The warning shows when `generated_at` is more than 36 hours old, or when it is missing or invalid.
+**Features added in v2** (read from the code in `app.js`)
+- **Themes:** the "Theme: ..." button at the top right of the hero cycles Neon (default), Calm and Light. The theme is set as `data-theme` on `<html>` and saved in `localStorage` (`CONFIG.THEME_KEY`).
+  - Calm: no glows or text shadows, softer purple/magenta, slightly desaturated hero image.
+  - Light: light page and panels. The hero stays dark in every theme, so its text keeps light colors.
+- **Saved stories (star button):** saves a story for later. A saved story keeps a small snapshot (title, url, source, type, category, importance, date, summary), because it leaves `data.json` after 3 days. The "Saved" view reads these snapshots.
+- **Hide stories (X button):** hides a story. "Restore hidden items (n)" brings all hidden stories back. Hiding also removes the story from Saved. Hidden entries are deleted automatically once the item is no longer in `data.json`.
+- **View buttons (All / New / Saved):** a new control (`#f-view`, hash key `view`). "New" shows stories first seen by this browser during the current visit.
+- **NEW tag:** an item is NEW if this browser first saw it after the start of the current "visit". A visit ends after `SESSION_GAP_HOURS` (6) away, and then the baseline moves to the last visit time. On the very first visit nothing is NEW.
+- **Duplicate grouping:** the same story from different sources is merged into one card with "Also reported by: <source links>". Two items match if they share a CVE id, or share at least `GROUP_MIN_SHARED_WORDS` (3) title words and the word overlap is at least `GROUP_SIMILARITY` (0.5). Details: only items from different sources match, each item is compared with a group's main item only (no chain merging), and a group has at most one item per source. The main item is the one with the highest importance, then the newest.
+- **Top threats now only shows when no filter is active, and those cards are removed from the main grid**, so they no longer repeat.
+- **Day headings** ("Today", "Yesterday", weekday) are shown only when sorting by Newest or Oldest.
+- **Count line:** "Showing X stories (Y items)", so it shows the effect of grouping.
+- **Hero is shorter and shows the whole head**, see "Hero size" below.
 
 ## Decisions
 
 **Design and where to change it**
-- **Colors:** the `:root` block at the top of `style.css`, with all 12 palette variables plus fonts (system and monospace stacks) and `--radius`.
-- **CONFIG keys in `app.js`:** `DATA_URL`, `DATA_URL_LOCAL_TEST`, `STALE_HOURS`, `HIGH_IMPORTANCE` (8), `TOP_THREATS` (3), `DEFAULT_SORT`, `IMPORTANCE_LEVELS`, `CATEGORY_COLORS`, `NEUTRAL_COLOR`, `TYPE_LABELS`.
-- **Importance levels:**
-  - `IMPORTANCE_LEVELS` only maps score to a level name: 1-3 low, 4-6 mid, 7-8 high, 9-10 crit.
-  - The actual colors for those levels live in `style.css` (`.card[data-level=...]`): muted, cyan, purple, magenta with glow on crit.
+- **Colors:** the `:root` block at the top of `style.css`. Theme overrides are at the end of the file (`:root[data-theme="calm"]` and `:root[data-theme="light"]`).
+- **Hero size (2 variables in `:root`):**
+  - `--hero-height: clamp(300px, 30vw, 470px)` : min, preferred (30% of screen width), max.
+  - `--hero-focus: 50% 0%` : which part of the image is shown. 0% = top of the image (head, wings, laurel crown), so any cropping happens at the bottom.
+  - Phones (max-width 640px) override both: `--hero-height: 360px`, `--hero-focus: 50% 10%`, and `.hero__content` gets extra top padding for the theme button.
+- **CONFIG keys in `app.js`:** `DATA_URL`, `DATA_URL_LOCAL_TEST`, `STALE_HOURS`, `HIGH_IMPORTANCE` (8), `TOP_THREATS` (3), `DEFAULT_SORT`, `STORAGE_KEY` (`neopheme.v1`), `THEME_KEY` (`neopheme.theme`), `SESSION_GAP_HOURS` (6), `GROUP_DUPLICATES` (true), `GROUP_MIN_SHARED_WORDS` (3), `GROUP_SIMILARITY` (0.5, higher = stricter), `IMPORTANCE_LEVELS`, `CATEGORY_COLORS`, `NEUTRAL_COLOR`, `TYPE_LABELS`. Also `THEMES` and `STOP_WORDS` as constants below CONFIG.
+- **Importance levels:** `IMPORTANCE_LEVELS` maps score to a level name (1-3 low, 4-6 mid, 7-8 high, 9-10 crit). The colors for each level live in `style.css` (`.card[data-level=...]`).
 - **Category chip colors:** `CONFIG.CATEGORY_COLORS`.
-- **Hero crop:** `object-position` on `.hero__img`.
-- The hero, mascot and logo carry the neon look. The "calmer theme" CSS override I offered later was **not** adopted; I decided to keep the original design.
+- The overlay on the hero is light at the top and dark only near the bottom, so the head is not dimmed and the text stays readable.
 
 **Security**
-- No `innerHTML` or `insertAdjacentHTML` anywhere. All DOM is built with `createElement` and `textContent` (helper `h()`); the only attributes set from data are `href`, `datetime` and `title`.
-- Links are validated with `new URL()` and only `http:` and `https:` are accepted (`safeUrl()`). The link uses `url`, falling back to `id`. If neither is valid, the title is plain text.
-- Links use `target="_blank"` and `rel="noopener noreferrer"`.
+- No `innerHTML` or `insertAdjacentHTML` with feed data. DOM is built with `createElement` and `textContent` (helper `h()`).
+- Links are validated with `new URL()`; only `http:` and `https:` are accepted (`safeUrl()`). Links use `target="_blank"` and `rel="noopener noreferrer"`.
 - Cards use `summary` only, never `content`.
-- No tokens, keys, analytics or third-party requests. The only network request is `data.json`; on localhost/file:// it goes to my own GitHub Pages site.
+- No tokens, keys, analytics or third-party requests. The only network request is `data.json`.
+- `localStorage` holds only my own choices and feed titles/summaries (saved snapshots, hidden ids, seen times, theme). Saved snapshots go through `normalizeItem` again and are rendered with `textContent`. Storage access is wrapped in try/catch, so blocked storage just means nothing is remembered.
+- The localStorage data is per browser and per site: `localhost:8000` and the live site do not share it, and nothing syncs between devices.
+- Security scan: `Select-String` for `token` matches `app.js` lines about `tokens` (title words used for duplicate grouping). These are false positives, not secrets.
+
+**How data is loaded**
+- `CONFIG.DATA_URL = "data.json"` (relative) in production. On localhost, 127.0.0.1 or file:// it reads `https://n3xmar.github.io/NeoPheme/data.json`.
+- Every fetch appends `?t=Date.now()` and uses `cache: "no-store"`.
+- The load fails with an error if the response is not OK or `items` is not an array.
+- Stale threshold: `CONFIG.STALE_HOURS = 36`. The banner text in `index.html` says "36 hours" in plain text, so edit both together.
 
 **URL hash / filter state**
-- Filters are written to the hash with `history.replaceState` (no history entries added): `q`, `cat`, `src`, `type`, `min`, `sort`. Defaults are omitted, so an unfiltered page has no hash.
-- The hash is read once in `init()` (page load and Retry). There is no `hashchange` listener.
-- `min` accepts only 5, 7 or 9. A hash value for category/source/type that does not exist in the data is ignored, and an invalid sort falls back to the default.
-- No localStorage.
+- Filters are written to the hash with `history.replaceState`: `q`, `cat`, `src`, `type`, `min`, `sort`, `view`. Defaults are omitted.
+- The hash is read once in `init()`. There is no `hashchange` listener.
+- Invalid hash values are ignored (`min` accepts only 5, 7, 9; `view` only all, new, saved).
 
 **Bad data handling (`normalizeItem`)**
-- Items that are not objects or have an empty or missing title are skipped.
-- `importance`: rounded and clamped to 1-10. Non-numeric or missing becomes 1.
-- `published_at`: an invalid date becomes null. The card shows "unknown time" and the item sorts as time 0.
-- Missing `source` becomes "Unknown". Missing `category` becomes "Uncategorized". Missing `type` becomes "other".
-- An unknown category or type is shown as the raw text with the neutral color (`NEUTRAL_COLOR`). A type missing from `TYPE_LABELS` is shown as raw text.
-- Empty `summary`: the summary paragraph is omitted.
-- Sorting is always done in JS. Default is importance desc, then date desc. Newest and Oldest use importance as the tiebreaker.
+- Items that are not objects or have an empty title are skipped.
+- `importance` is rounded and clamped to 1-10 (missing = 1). Invalid `published_at` becomes null ("unknown time", sorts as 0).
+- Missing `source` = "Unknown", `category` = "Uncategorized", `type` = "other". Unknown category/type uses the neutral color and raw text.
+- Sorting is always done in JS (importance desc then date desc by default).
 
 ## Problems and fixes
 
-- No code changes were made after the first version that I know of. I cannot see my local files, so this summary reflects the code as delivered.
-- Changes discussed in the chat, none adopted:
-  - I wanted a different tagline (the original sounded AI-generated). Options were offered, but I never picked one in this chat. If I edited it myself, the code differs from the delivered version in that one line in `index.html`.
-  - A "calm theme" CSS override block was offered and then withdrawn. The final design is the original.
-- Phase 7 is confirmed working locally (via `python -m http.server`): it loads `data.json` and shows the news correctly.
+- **Server started from the wrong folder.** `python -m http.server` was run inside `C:\Dev\NeoPheme-pages` (the published copy), so local changes did not show. Fix: run it inside `C:\Dev\NeoPheme\dashboard` and hard-refresh (`Ctrl+Shift+R`).
+- **Hero size edits had no effect.** `style.css` had a "v2 additions" block at the end with a second `.hero { min-height: clamp(180px, 26vh, 250px) }` that overrode the earlier rule. Fix: merged everything into one clean `style.css` with a single hero rule driven by `--hero-height` and `--hero-focus`.
+- **Hero was too short and cut the head.** Fixed with `--hero-height: clamp(300px, 30vw, 470px)` and `--hero-focus: 50% 0%`.
+- **Security scan ran from the wrong folder** (`dashboard\dashboard` not found). Run it from `C:\Dev\NeoPheme`.
+- The tagline "Pheme heard it first." is in the live page.
 
-## Deployment facts the publisher needs
+## Deployment facts (how to publish)
 
-- **Copy to the root of `gh-pages`:** the *contents* of `dashboard/`, not the folder itself: `index.html`, `css/style.css`, `js/app.js`, `assets/pheme.webp`. Result: `https://n3xmar.github.io/NeoPheme/index.html`, `.../css/style.css`, and so on.
-- **`data.json` must not be deleted.** It lives in the same root, written by n8n. Add files by name; never run `git add .` on `gh-pages`.
-- **All paths are relative** (no leading `/`):
-  - `css/style.css`, `js/app.js`, `assets/pheme.webp`, `data.json`.
-  - The favicon and the meander pattern are inline data URIs, so they need no file or request.
-- **Production fetch:** `data.json` by relative path (`DATA_URL`), same folder as `index.html`.
-- **No build step and no server-side code.** It is plain HTML, CSS and JS.
-- **Image:** `assets/pheme.webp`, exact name and lowercase.
-  - If it is missing, the `error` handler removes the `<img>` and the CSS gradient on `.hero` shows.
-  - The image has `alt=""` because it is decorative.
+1. In `C:\Dev\NeoPheme`: run the security scan, `git status`, `git add` the changed dashboard files by name, commit, push to `main`.
+2. `git -C C:\Dev\NeoPheme-pages pull` (n8n commits `data.json` there daily).
+3. `Copy-Item` each changed file by name into `C:\Dev\NeoPheme-pages` (`index.html`, `css\style.css`, `js\app.js`, `assets\pheme.webp`).
+4. `git -C C:\Dev\NeoPheme-pages status`: only those files may show as modified, never `data.json`.
+5. `git -C C:\Dev\NeoPheme-pages add <files by name>`, commit, push.
+6. Wait up to about 10 minutes (Pages CDN), then hard-refresh the live site. Check DevTools Network for 404s.
 
-**To double-check before publishing**
-- Confirm the tagline in `index.html` is what I want (see Problems and fixes).
-- Confirm `pheme.webp` exists in `assets/` and is committed. Check the file size too, since it is a full 16:9 image.
-- The image `error` listener is attached on `DOMContentLoaded`. If the file fails very quickly it could theoretically fire earlier, which leaves a broken image over the gradient. Test once by temporarily renaming the file.
-- Hard-refresh after publishing. The Pages CDN can serve an old copy for about 10 minutes.
-- Check the live page for 404s on `css/style.css`, `js/app.js` and `assets/pheme.webp` (DevTools Network tab), and that it loads `data.json` from its own origin, not from the absolute URL.
-- `color-mix()` is used in the CSS (needs a 2023+ browser). On older browsers, the glows and tinted backgrounds just do not show.
+Rules: never `git add .`, never delete `data.json`, all paths relative (no leading `/`), no build step.
 
 ## Open tasks
 
-- Publish to `gh-pages` (the Phase 7 deployment step: manual copy or a deploy script that never deletes `data.json`).
+- Verify the live site after publishing: no 404s, `data.json` loaded from its own origin, filters, themes, save/hide/restore, mobile layout.
+- Verify the first scheduled n8n runs on 2026-11-24, and that `generated_at` updates and the stale banner behaves correctly.
 - Known limitations:
-  - Top threats items also appear again in the main grid when no filter is active.
-  - Stats ignore the active filters.
+  - Stats (total, high importance, top category, sources) ignore filters and hidden stories, and count items, not grouped stories.
   - Search is a simple substring match on title and summary.
   - No pagination (fine for about 40 items).
   - Relative times are computed at render and do not update live.
   - No auto-refresh (by design, once-a-day data).
-  - No `hashchange` listener, so editing the hash by hand needs a reload.
-  - The "video" type has a label but no source currently produces it.
-- Verify the first scheduled n8n runs on 2026-11-24, and that `generated_at` updates and the stale banner behaves correctly on the live site.
-- Optional later: calmer theme (less glow, cyan as the only accent), and Phase 10 ideas that affect the UI (duplicate grouping, longer window for high-importance items, weekly digest).
+  - No `hashchange` listener.
+  - Grouping is title-word based, so it can miss or wrongly merge items. Tune `GROUP_SIMILARITY` and `GROUP_MIN_SHARED_WORDS`.
+  - Saved, hidden and NEW state live only in this browser's localStorage (no sync, lost if site data is cleared).
+  - The "video" type has a label but no source produces it.
+- Phase 10 ideas that affect the UI: server-side duplicate grouping and a score boost in n8n, longer window for high-importance items, weekly digest.
