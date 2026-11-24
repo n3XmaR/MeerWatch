@@ -66,13 +66,6 @@ a { color: inherit; }
 .tagline { margin: 6px 0 4px; max-width: 520px; color: var(--text); text-shadow: 0 1px 6px #000; }
 .updated { margin: 0; font-family: var(--mono); font-size: .85rem; color: var(--cyan-glow); text-shadow: 0 1px 6px #000; }
 
-.theme-btn {
-  position: absolute; top: 12px; right: 12px; z-index: 3;
-  background: rgba(18, 19, 23, .6); color: #ececf0; border: 1px solid var(--border);
-  border-radius: 8px; padding: .35rem .7rem; font: inherit; font-size: .8rem; cursor: pointer;
-}
-.theme-btn:hover { border-color: var(--cyan); }
-
 /* Greek key (meander) border */
 .meander {
   height: 14px;
@@ -198,8 +191,7 @@ input[type="search"]:focus, select:focus { border-color: var(--cyan); outline: n
 }
 @media (max-width: 640px) {
   :root { --hero-height: 360px; --hero-focus: 50% 10%; }
-  .hero__content { padding-top: 56px; }
-}
+  }
 @media (max-width: 560px) {
   .grid, .skeleton-grid { grid-template-columns: 1fr; }
   .tagline { font-size: .92rem; }
@@ -207,25 +199,4 @@ input[type="search"]:focus, select:focus { border-color: var(--cyan); outline: n
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-}
-
-/* ========= Themes ========= */
-/* Calm: softer amber, less glow */
-:root[data-theme="calm"] { --cyan: #d6a24a; --cyan-glow: #e5c07b; --purple: #d6a24a; --magenta: #e0a96d; }
-:root[data-theme="calm"] * { text-shadow: none !important; }
-:root[data-theme="calm"] .card, :root[data-theme="calm"] .badge,
-:root[data-theme="calm"] .stat, :root[data-theme="calm"] .brand__name { box-shadow: none !important; }
-:root[data-theme="calm"] .hero__img { filter: saturate(.75) brightness(.9); }
-
-/* Light */
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg-deep: #f6f5f2; --bg-panel: #ffffff; --bg-panel-2: #efece6; --border: #ddd8cc;
-  --cyan: #b45309; --cyan-glow: #92400e; --purple: #b45309; --magenta: #c2410c;
-  --text: #1c1917; --text-muted: #6b655b; --warn: #b45309; --danger: #dc2626;
-}
-:root[data-theme="light"] * { text-shadow: none !important; }
-/* The hero stays dark in every theme */
-:root[data-theme="light"] .hero {
-  --text: #ececf0; --text-muted: #b5b9c4; --cyan: #f59e0b; --cyan-glow: #fbbf24; --bg-deep: #121317;
 }
