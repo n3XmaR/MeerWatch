@@ -27,12 +27,12 @@ const CONFIG = {
     "Exploit/Zero-day": "#f43f5e",
     "Malware/Ransomware": "#fb923c",
     "Breach/Incident": "#fbbf24",
-    "Vulnerability": "#d946ef",
-    "Research": "#22d3ee",
-    "Tool": "#5eead4",
-    "Policy/Other": "#8fa3c8",
+    "Vulnerability": "#f59e0b",
+    "Research": "#94a3b8",
+    "Tool": "#a8a29e",
+    "Policy/Other": "#9a9fab",
   },
-  NEUTRAL_COLOR: "#8fa3c8",
+  NEUTRAL_COLOR: "#9a9fab",
   TYPE_LABELS: { news: "News", vuln: "Vulnerability", research: "Research", tool: "Tool", video: "Video" },
 };
 const THEMES = [["neon", "Neon"], ["calm", "Calm"], ["light", "Light"]];
