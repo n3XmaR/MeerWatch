@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-24T04:20:36.802Z",
-  "count": 74,
+  "generated_at": "2026-11-24T04:40:59.127Z",
+  "count": 76,
   "items": [
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
@@ -469,6 +469,30 @@
       "category": "Tool",
       "importance": 5,
       "summary": "Isolated-lab reproductions of five nginx2root vulnerabilities, including a compact HTTP/2 flow-control accounting PoC, packet captures, RCE evidence, and a guarded compatibility runner."
+    },
+    {
+      "id": "https://kitploit.com/en/tools/gitlab/acidvegas/flyswatter",
+      "title": "New tool: flyswatter",
+      "url": "https://kitploit.com/en/tools/gitlab/acidvegas/flyswatter",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-24T01:01:55.000Z",
+      "content": "Drop-in nginx trap that poisons the well for scanners, skids & AI crawlers with fake secrets.",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Drop-in nginx trap that poisons the well for scanners, skids & AI crawlers with fake secrets."
+    },
+    {
+      "id": "https://kitploit.com/en/posts/adguardhome-a60e9906af3037c3",
+      "title": "Release: AdGuardHome v1.1.0-b.1",
+      "url": "https://kitploit.com/en/posts/adguardhome-a60e9906af3037c3",
+      "source": "Kitploit",
+      "type": "tool",
+      "published_at": "2026-11-24T00:01:35.000Z",
+      "content": "Network-wide ads & trackers blocking DNS server",
+      "category": "Tool",
+      "importance": 4,
+      "summary": "Network-wide ads & trackers blocking DNS server"
     },
     {
       "id": "https://kitploit.com/en/tools/github/sclbd/deepfakebench-mm",
