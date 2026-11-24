@@ -12,7 +12,6 @@ const CONFIG = {
   TOP_THREATS: 3,
   DEFAULT_SORT: "importance",
   STORAGE_KEY: "neopheme.v1",       // saved / dismissed / seen (this browser only)
-  THEME_KEY: "neopheme.theme",
   SESSION_GAP_HOURS: 6,             // a "visit" ends after this many hours away
   GROUP_DUPLICATES: true,           // merge the same story from different sources
   GROUP_MIN_SHARED_WORDS: 3,        // title match: at least this many shared words...
@@ -35,7 +34,6 @@ const CONFIG = {
   NEUTRAL_COLOR: "#9a9fab",
   TYPE_LABELS: { news: "News", vuln: "Vulnerability", research: "Research", tool: "Tool", video: "Video" },
 };
-const THEMES = [["neon", "Neon"], ["calm", "Calm"], ["light", "Light"]];
 const STOP_WORDS = new Set(["the", "and", "for", "with", "from", "that", "this", "are", "has", "have", "its", "into", "over", "new", "via", "after", "how", "why", "what", "says", "said", "about", "more", "than", "can", "now", "will", "your", "you", "not", "but", "out"]);
 
 /* ========= State ========= */
@@ -404,25 +402,6 @@ function syncControls() {
   document.querySelectorAll("#f-view button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === filters.view)));
 }
 
-/* ========= Theme ========= */
-function applyTheme(name) {
-  document.documentElement.dataset.theme = name;
-  const t = THEMES.find((x) => x[0] === name) || THEMES[0];
-  $("theme-btn").textContent = "Theme: " + t[1];
-}
-function initTheme() {
-  let t = "neon";
-  try { t = localStorage.getItem(CONFIG.THEME_KEY) || "neon"; } catch (e) { /* ignore */ }
-  if (!THEMES.some((x) => x[0] === t)) t = "neon";
-  applyTheme(t);
-  $("theme-btn").addEventListener("click", () => {
-    const i = THEMES.findIndex((x) => x[0] === document.documentElement.dataset.theme);
-    const next = THEMES[(i + 1) % THEMES.length][0];
-    applyTheme(next);
-    try { localStorage.setItem(CONFIG.THEME_KEY, next); } catch (e) { /* ignore */ }
-  });
-}
-
 /* ========= Page states ========= */
 function showOnly(state) {
   $("loading").hidden = state !== "loading";
@@ -507,7 +486,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (img.complete && img.naturalWidth === 0) img.remove();
     else img.addEventListener("error", () => img.remove());
   }
-  initTheme();
   bindEvents();
   init();
 });
