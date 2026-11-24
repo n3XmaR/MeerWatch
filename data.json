@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-24T04:40:59.127Z",
-  "count": 76,
+  "generated_at": "2026-11-24T18:57:15.708Z",
+  "count": 56,
   "items": [
     {
       "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
@@ -37,18 +37,6 @@
       "category": "Exploit/Zero-day",
       "importance": 10,
       "summary": "Project MONAI MONAI Label. Project MONAI MONAI Label contains a path traversal vulnerability that allows an unauthenticated remote attacker to write arbitrary files outside the intended datastore…"
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html",
-      "title": "Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge",
-      "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-21T08:49:13.000Z",
-      "content": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation.\n\nThe vulnerabilities are listed below -\n\n\n  CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in",
-      "category": "Exploit/Zero-day",
-      "importance": 10,
-      "summary": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known…"
     },
     {
       "id": "https://thehackernews.com/2026/11/weekly-recap-vmware-0-day-java4shell.html",
@@ -109,18 +97,6 @@
       "category": "Exploit/Zero-day",
       "importance": 8,
       "summary": "N-able MailAssure. N-able MailAssure (SpamExperts) contains a server-side request forgery vulnerability in the LDAP synchronization connection check that allows an authenticated API user to connect…"
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html",
-      "title": "Attackers' AI Agents Found a Zero-Day in Medical-Imaging Software and Gained Root Access",
-      "url": "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-21T11:03:17.000Z",
-      "content": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week.\n\nThe flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup,",
-      "category": "Exploit/Zero-day",
-      "importance": 8,
-      "summary": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon…"
     },
     {
       "id": "https://www.securityweek.com/phpaftershell-vulnerability-revives-php2shells-attack-path/",
@@ -193,18 +169,6 @@
       "category": "Vulnerability",
       "importance": 6,
       "summary": "A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux…"
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
-      "title": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys",
-      "url": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-21T11:05:53.000Z",
-      "content": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG.\n\nThe GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions.\n\nThe bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0,",
-      "category": "Vulnerability",
-      "importance": 6,
-      "summary": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that…"
     },
     {
       "id": "https://isc.sans.edu/diary/rss/33550",
@@ -435,42 +399,6 @@
       "summary": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in…"
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/",
-      "title": "Microsoft Entra Connect Health flaw exploited to steal tenant data",
-      "url": "https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/",
-      "source": "BleepingComputer",
-      "type": "news",
-      "published_at": "2026-11-21T18:01:58.000Z",
-      "content": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information. [...]",
-      "category": "Breach/Incident",
-      "importance": 5,
-      "summary": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email…"
-    },
-    {
-      "id": "https://www.bleepingcomputer.com/news/security/fbi-reportedly-hacked-again-this-time-targeting-nationwide-police-database/",
-      "title": "FBI reportedly hacked again, this time targeting nationwide police database",
-      "url": "https://www.bleepingcomputer.com/news/security/fbi-reportedly-hacked-again-this-time-targeting-nationwide-police-database/",
-      "source": "BleepingComputer",
-      "type": "news",
-      "published_at": "2026-11-21T14:26:04.000Z",
-      "content": "FBI systems have reportedly been breached for the second time in two months, this time targeting the agency's National Crime Information Center (NCIC), which is used to share information between local, state, and federal law enforcement agencies. [...]",
-      "category": "Breach/Incident",
-      "importance": 5,
-      "summary": "FBI systems have reportedly been breached for the second time in two months, this time targeting the agency's National Crime Information Center (NCIC), which is used to share information between…"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/censys-research/nginx2root",
-      "title": "New tool: nginx2root",
-      "url": "https://kitploit.com/en/tools/github/censys-research/nginx2root",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T06:53:49.000Z",
-      "content": "Isolated-lab reproductions of five nginx2root vulnerabilities, including a compact HTTP/2 flow-control accounting PoC, packet captures, RCE evidence, and a guarded compatibility runner.",
-      "category": "Tool",
-      "importance": 5,
-      "summary": "Isolated-lab reproductions of five nginx2root vulnerabilities, including a compact HTTP/2 flow-control accounting PoC, packet captures, RCE evidence, and a guarded compatibility runner."
-    },
-    {
       "id": "https://kitploit.com/en/tools/gitlab/acidvegas/flyswatter",
       "title": "New tool: flyswatter",
       "url": "https://kitploit.com/en/tools/gitlab/acidvegas/flyswatter",
@@ -663,66 +591,6 @@
       "summary": "The FBI is investigating an apparent hack of a national law enforcement database that it maintains."
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/badbox-30-botnet-returns-with-record-breaking-40-billion-daily-ad-requests/",
-      "title": "BADBOX botnet returns with record-breaking 40 billion daily ad requests",
-      "url": "https://www.bleepingcomputer.com/news/security/badbox-30-botnet-returns-with-record-breaking-40-billion-daily-ad-requests/",
-      "source": "BleepingComputer",
-      "type": "news",
-      "published_at": "2026-11-21T15:17:27.000Z",
-      "content": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions. [...]",
-      "category": "Malware/Ransomware",
-      "importance": 4,
-      "summary": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions."
-    },
-    {
-      "id": "https://www.securityweek.com/president-trump-taps-kirsten-davies-as-national-cyber-director/",
-      "title": "President Trump Taps Kirsten Davies as National Cyber Director",
-      "url": "https://www.securityweek.com/president-trump-taps-kirsten-davies-as-national-cyber-director/",
-      "source": "SecurityWeek",
-      "type": "news",
-      "published_at": "2026-11-21T13:00:00.000Z",
-      "content": "White House says the battle-tested cyber leader will drive an America First cyber strategy.\nThe post President Trump Taps Kirsten Davies as National Cyber Director appeared first on SecurityWeek.",
-      "category": "Policy/Other",
-      "importance": 4,
-      "summary": "White House says the battle-tested cyber leader will drive an America First cyber strategy."
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/a-single-malicious-webpage-let.html",
-      "title": "A Single Malicious Webpage Let Researchers Hijack Meta Muse and Access Private Chats",
-      "url": "https://thehackernews.com/2026/11/a-single-malicious-webpage-let.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-21T11:53:07.000Z",
-      "content": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown.\n\nThe same attack could be extended to reach the credentials Muse stores for the user's connected accounts.\n\nThe work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's",
-      "category": "Research",
-      "importance": 4,
-      "summary": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could…"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/siquanhuang/detectvit",
-      "title": "New tool: DetectViT",
-      "url": "https://kitploit.com/en/tools/github/siquanhuang/detectvit",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T08:54:10.000Z",
-      "content": "Training-free, trigger-agnostic test-time detector for backdoored Vision Transformers that flags poisoned samples using inter-head attention consistency and entropy variance.",
-      "category": "Tool",
-      "importance": 4,
-      "summary": "Training-free, trigger-agnostic test-time detector for backdoored Vision Transformers that flags poisoned samples using inter-head attention consistency and entropy variance."
-    },
-    {
-      "id": "https://thehackernews.com/2026/11/signal-blocks-ai-agents-from-reading.html",
-      "title": "Signal Blocks AI Agents From Reading Private Chats via Screenshots on Android and iOS",
-      "url": "https://thehackernews.com/2026/11/signal-blocks-ai-agents-from-reading.html",
-      "source": "The Hacker News",
-      "type": "news",
-      "published_at": "2026-11-21T08:49:20.000Z",
-      "content": "Signal has announced that it will restrict screenshots by default to stop artificial intelligence (AI) agents from reading private chats on Android and iOS devices, but conceded that the protection is \"incomplete.\"\n\nThe feature applies to agentic systems built into iOS 27 and on Android versions where the encrypted messaging platform can detect an AI assistant attempting to read the Signal",
-      "category": "Policy/Other",
-      "importance": 4,
-      "summary": "Signal has announced that it will restrict screenshots by default to stop artificial intelligence (AI) agents from reading private chats on Android and iOS devices, but conceded that the protection…"
-    },
-    {
       "id": "https://kitploit.com/en/tools/github/leesh3288/tantrum",
       "title": "New tool: tantrum",
       "url": "https://kitploit.com/en/tools/github/leesh3288/tantrum",
@@ -805,114 +673,6 @@
       "category": "Tool",
       "importance": 3,
       "summary": "Patched Firefox browser with C++-level fingerprint spoofing and humanized mouse automation. Drop-in Playwright replacement that passes all major bot detection suites for stealth web scraping."
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/b4l3ri0n/osep",
-      "title": "New tool: OSEP",
-      "url": "https://kitploit.com/en/tools/github/b4l3ri0n/osep",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T18:22:46.000Z",
-      "content": "Collection of OSEP course sample code and customizations covering AMSI and AV evasion, DLL and reflective injection, process hollowing, UAC and AppLocker bypasses, and phishing macros.",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "Collection of OSEP course sample code and customizations covering AMSI and AV evasion, DLL and reflective injection, process hollowing, UAC and AppLocker bypasses, and phishing macros."
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/syslifters/hackthebox-reporting",
-      "title": "New tool: HackTheBox-Reporting",
-      "url": "https://kitploit.com/en/tools/github/syslifters/hackthebox-reporting",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T17:22:25.000Z",
-      "content": "Hack The Box CPTS, CWES, CDSA, CWEE, CAPE, CJCA, CWPE, COAE, CDEP Exam and Lab Reporting / Note-Taking Tool",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "Hack The Box CPTS, CWES, CDSA, CWEE, CAPE, CJCA, CWPE, COAE, CDEP Exam and Lab Reporting / Note-Taking Tool"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/exploitbey/kernel-krop-smep-bypass",
-      "title": "New tool: kernel-krop-smep-bypass",
-      "url": "https://kitploit.com/en/tools/github/exploitbey/kernel-krop-smep-bypass",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T16:22:17.000Z",
-      "content": "Linux Kernel 6.17 Stack Overflow - SMEP Bypass via kROP (Turkce Writeup)",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "Linux Kernel 6.17 Stack Overflow - SMEP Bypass via kROP (Turkce Writeup)"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/hackinaggie/osep-tools-v2",
-      "title": "New tool: OSEP-Tools-v2",
-      "url": "https://kitploit.com/en/tools/github/hackinaggie/osep-tools-v2",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T15:22:15.000Z",
-      "content": "A marriage between Octoberfest7/OSEP-Tools and chvancooten/OSEP-Code-Snippets with some improvements/additions",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "A marriage between Octoberfest7/OSEP-Tools and chvancooten/OSEP-Code-Snippets with some improvements/additions"
-    },
-    {
-      "id": "https://kitploit.com/en/posts/esp32marauder-0122d52e79b40fdc",
-      "title": "Release: ESP32Marauder v1.21.0",
-      "url": "https://kitploit.com/en/posts/esp32marauder-0122d52e79b40fdc",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T11:51:57.000Z",
-      "content": "A suite of WiFi/Bluetooth offensive and defensive tools for the ESP32",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "A suite of WiFi/Bluetooth offensive and defensive tools for the ESP32"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/rbidou/aitarpit",
-      "title": "New tool: aitarpit",
-      "url": "https://kitploit.com/en/tools/github/rbidou/aitarpit",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T09:54:14.000Z",
-      "content": "A honeypot that disrupts AI-agent-driven attacks with tarpitting and \"context bomb\" techniques. Python/Flask, config-driven, with multi-channel alerting and an optional web UI.",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "A honeypot that disrupts AI-agent-driven attacks with tarpitting and \"context bomb\" techniques. Python/Flask, config-driven, with multi-channel alerting and an optional web UI."
-    },
-    {
-      "id": "https://kitploit.com/en/posts/cyberchef-4b7cdcfbf399f154",
-      "title": "Release: CyberChef v11.6.0",
-      "url": "https://kitploit.com/en/posts/cyberchef-4b7cdcfbf399f154",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T07:53:50.000Z",
-      "content": "The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis"
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/emirmrkaljevic/iotaudit",
-      "title": "New tool: iotaudit",
-      "url": "https://kitploit.com/en/tools/github/emirmrkaljevic/iotaudit",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T05:53:01.000Z",
-      "content": "One command to audit your own smart-home devices: who they phone home to, plaintext vs TLS, open ports, A-F grade and a local HTML/PDF report. CLI + MCP server, no cloud.",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "One command to audit your own smart-home devices: who they phone home to, plaintext vs TLS, open ports, A-F grade and a local HTML/PDF report. CLI + MCP server, no cloud."
-    },
-    {
-      "id": "https://kitploit.com/en/tools/github/ivica00/bionz-x-research",
-      "title": "New tool: bionz-x-research",
-      "url": "https://kitploit.com/en/tools/github/ivica00/bionz-x-research",
-      "source": "Kitploit",
-      "type": "tool",
-      "published_at": "2026-11-21T04:52:57.000Z",
-      "content": "BIONZ X clean-room execution environment, hardware contracts, and firmware research. Project discord:",
-      "category": "Tool",
-      "importance": 3,
-      "summary": "BIONZ X clean-room execution environment, hardware contracts, and firmware research. Project discord:"
     }
   ]
 }
