@@ -6,7 +6,7 @@
 /* ========= CONFIG: change settings here ========= */
 const CONFIG = {
   DATA_URL: "data.json",
-  DATA_URL_LOCAL_TEST: "https://n3xmar.github.io/NeoPheme/data.json",
+  DATA_URL_LOCAL_TEST: "https://n3xmar.github.io/MeerWatch/data.json",
   STALE_HOURS: 36,
   HIGH_IMPORTANCE: 8,
   TOP_THREATS: 3,
