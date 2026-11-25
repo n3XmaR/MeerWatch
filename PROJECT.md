@@ -6,14 +6,14 @@ Personal cybersecurity news dashboard (formerly "NeoPheme", renamed 2026-11-24).
 - **Identity:** dark charcoal with amber accents. The logo is still the winged eye with laurel, and the hero has a Greek key (meander) border. These come from the old Pheme theme and were kept on purpose.
 - **Goal:** the project is educational for the n8n/automation side. I build the n8n parts, the assistant guides and explains WHY.
 - **Purpose:** stay current on important news, research and NEW tools from well-known vendors/platforms, so I don't learn about notable tools late.
-- **Status (2026-11-25):** the project is feature-complete and running. What is left is small maintenance (see Open Tasks). Phase 8 (AI) is optional and undecided; Phase 9 (VPS) is skipped for now.
+- **Status (2026-11-25):** the project is feature-complete and running. All maintenance is done except the dated checks in Open Tasks. Phase 8 (AI) is optional and undecided; Phase 9 (VPS) is skipped for now.
 
 ## Environment
 
 - OS: Windows. RAM is limited (Docker/WSL capped at 2GB via `C:\Users\zxamm\.wslconfig`).
 - Repo: `C:\Dev\MeerWatch` (outside OneDrive on purpose). GitHub: `n3XmaR/MeerWatch` (currently PUBLIC).
 - gh-pages worktree: `C:\Dev\MeerWatch-pages` (separate folder for the `gh-pages` branch; never `git checkout gh-pages` inside `C:\Dev\MeerWatch`). The internal folder `.git/worktrees/NeoPheme-pages` keeps the old name; this is harmless.
-- n8n runs in Docker (`n8n/docker-compose.yml` + `n8n/.env`), http://localhost:5678, timezone Asia/Amman.
+- n8n runs in Docker (`n8n/docker-compose.yml` + `n8n/.env`), http://localhost:5678, timezone Asia/Amman. The image is PINNED to `docker.n8n.io/n8nio/n8n:2.48.7` (since 2026-11-25). To upgrade on purpose: change the tag, `cd C:\Dev\MeerWatch\n8n`, `docker compose up -d`, re-check that the workflow is Published. Never run `docker compose down -v` (it deletes the volume with all workflows and credentials).
 - The PC must be ON, with Docker Desktop running, at 07:00 and 07:15 (sleep stops the schedule like shutdown does). Docker Desktop should start with Windows. Compose has `restart: unless-stopped`, so do NOT press Stop on the container by hand; quit Docker Desktop itself instead.
 - Telegram is blocked in Jordan, so no Telegram bot. Output is a website.
 - Everything important lives in files (repo + this PROJECT.md + docs/phase-*.md), so any chat or account can resume from them.
@@ -139,7 +139,7 @@ Personal cybersecurity news dashboard (formerly "NeoPheme", renamed 2026-11-24).
 
 Nothing is required. Optional small items (Phase 10), in this order:
 1. Set KEV `published_at` to end of day (`T23:59:59Z`) so KEV items do not expire earlier than news.
-2. Pin the n8n image version in `docker-compose.yml` and review the n8n 3.0 Migration Report (Settings > Migration Report).
+2. Before upgrading n8n to 3.0, read the Migration Report (Settings > Migration Report). The version is pinned, so nothing upgrades by accident.
 3. Watch Kitploit noise for a few days; add a vendor allowlist or lower the cap if the dashboard feels crowded with tools.
 4. Later, only if wanted: server-side duplicate grouping and a score boost for stories in 2+ sources, a longer window for high-importance items, weekly digest.
 
@@ -147,17 +147,11 @@ Phase 8 (AI) only if I decide I want it. It adds API keys, cost and failure mode
 
 ## Open Tasks
 
-Closed on 2026-11-25: n8n `Edit a file` repository set to `MeerWatch`; `workflows/06-meerwatch.json` exported and committed; docs `phase-5-6.md` and `phase-7.md` updated; git history checked for secrets (no tokens, no `.env`, `N8N_ENCRYPTION_KEY` appears only as a variable name); triggers restored to 07:00 / 07:15 and published.
+Closed on 2026-11-25: n8n `Edit a file` repository set to `MeerWatch`; `workflows/06-meerwatch.json` exported and committed; docs, `PROJECT.md` and `README.md` updated; git history checked for secrets (no tokens, no `.env`, `N8N_ENCRYPTION_KEY` appears only as a variable name); triggers restored to 07:00 / 07:15 and published; old `pheme.webp` removed from `main` and `gh-pages`; new hero image published; workflow timezone confirmed (Asia/Amman); `.gitignore` (`n8n/`) added on gh-pages; `N8N_ENCRYPTION_KEY` backed up outside the repo; n8n image pinned to 2.48.7.
 
 Still open:
-- Commit the updated `PROJECT.md` and `README.md` (add by name).
-- Check the old hero image is gone: `git ls-files dashboard/assets` and `git -C C:\Dev\MeerWatch-pages ls-files assets`. If `pheme.webp` is still there, `git rm` it in both places (it stays in history, which is fine).
 - Check tomorrow morning (2026-11-26) after 07:15: Executions show two separate scheduled runs (07:00 and 07:15, no hand icon), `data.json` starts with `{`, and the site shows the new "Last updated".
 - Verify Cleanup around 2026-11-28 (the table was cleared on 2026-11-23, so no row is older than 4 days before then).
-- Confirm Workflow Settings: timezone = Asia/Amman and executions are saved.
-- Add `.gitignore` (`n8n/`) on gh-pages (inside `C:\Dev\MeerWatch-pages`, add by name, push).
-- Back up `N8N_ENCRYPTION_KEY` (value in `n8n/.env`) outside the repo, e.g. in a password manager. Without it, saved n8n credentials cannot be decrypted if the Docker volume is lost.
-- Pin the n8n version in `n8n/docker-compose.yml` (tag instead of `latest`; the current version is under n8n Settings > About), then `docker compose up -d`. Review the n8n 3.0 Migration Report.
 - Renew the GitHub token before about 2027-02-21 (set a calendar reminder) and make sure it still covers the repo.
 - Optional: rename the n8n workflow and the credential ("GitHub - NeoPheme export"); a logo that matches the new name (the winged eye + laurel belongs to the old Pheme identity).
 - Optional before sharing the project publicly (e.g. a LinkedIn post): read the README as a stranger would and open the live site on a phone.
