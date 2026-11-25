@@ -7,15 +7,15 @@
 ```
 dashboard/
 ├── index.html      page structure, inline SVG favicon, inline SVG logo, loads css/style.css and js/app.js
-├── css/style.css   palette (CSS variables on :root), layout, cards, hero, themes, states, responsive rules
+├── css/style.css   palette (CSS variables on :root), layout, cards, hero, states, responsive rules
 ├── js/app.js       CONFIG, data loading, normalization, filtering, sorting, grouping, rendering, URL hash
-└── assets/pheme.webp   mascot image (placed manually by me, not generated)
+└── assets/meerwatch.webp   meerkat hero image (placed manually by me, not generated)
 ```
 
-Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/NeoPheme/
+Published to the root of `gh-pages`: https://n3xmar.github.io/MeerWatch/ (renamed from NeoPheme on 2026-11-24; the old URL no longer works). See "Rebrand" below.
 
 **Features implemented (v1)**
-- **Hero:** mascot image, dark gradient overlay, inline SVG logo (winged eye + laurel), "NeoPheme" title, tagline ("Pheme heard it first."), and "Last updated: <local time> | <n> items". CSS gradient fallback if the image fails.
+- **Hero:** mascot image, dark gradient overlay, inline SVG logo (winged eye + laurel), "MeerWatch" title, tagline ("Always on watch."), and "Last updated: <local time> | <n> items". CSS gradient fallback if the image fails.
 - **Meander (Greek key) border:** CSS data-URI SVG under the hero and above the footer.
 - **Stats strip:** total items, high-importance count (importance >= 8), top category with its count, number of sources. Computed on all items, not on the filtered view.
 - **Top threats:** the 3 highest-importance items as larger cards. Shown only when no filter is active.
@@ -26,9 +26,7 @@ Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/N
 - **Footer:** credit line plus a note that scoring is rule-based.
 
 **Features added in v2** (read from the code in `app.js`)
-- **Themes:** the "Theme: ..." button at the top right of the hero cycles Neon (default), Calm and Light. The theme is set as `data-theme` on `<html>` and saved in `localStorage` (`CONFIG.THEME_KEY`).
-  - Calm: no glows or text shadows, softer purple/magenta, slightly desaturated hero image.
-  - Light: light page and panels. The hero stays dark in every theme, so its text keeps light colors.
+- **Themes (removed on 2026-11-24):** v2 had a Neon / Calm / Light switcher. It was removed in the rebrand; there is now one amber-on-charcoal theme.
 - **Saved stories (star button):** saves a story for later. A saved story keeps a small snapshot (title, url, source, type, category, importance, date, summary), because it leaves `data.json` after 3 days. The "Saved" view reads these snapshots.
 - **Hide stories (X button):** hides a story. "Restore hidden items (n)" brings all hidden stories back. Hiding also removes the story from Saved. Hidden entries are deleted automatically once the item is no longer in `data.json`.
 - **View buttons (All / New / Saved):** a new control (`#f-view`, hash key `view`). "New" shows stories first seen by this browser during the current visit.
@@ -42,12 +40,12 @@ Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/N
 ## Decisions
 
 **Design and where to change it**
-- **Colors:** the `:root` block at the top of `style.css`. Theme overrides are at the end of the file (`:root[data-theme="calm"]` and `:root[data-theme="light"]`).
+- **Colors:** the `:root` block at the top of `style.css`. There are no theme overrides anymore.
 - **Hero size (2 variables in `:root`):**
   - `--hero-height: clamp(300px, 30vw, 470px)` : min, preferred (30% of screen width), max.
   - `--hero-focus: 50% 0%` : which part of the image is shown. 0% = top of the image (head, wings, laurel crown), so any cropping happens at the bottom.
-  - Phones (max-width 640px) override both: `--hero-height: 360px`, `--hero-focus: 50% 10%`, and `.hero__content` gets extra top padding for the theme button.
-- **CONFIG keys in `app.js`:** `DATA_URL`, `DATA_URL_LOCAL_TEST`, `STALE_HOURS`, `HIGH_IMPORTANCE` (8), `TOP_THREATS` (3), `DEFAULT_SORT`, `STORAGE_KEY` (`neopheme.v1`), `THEME_KEY` (`neopheme.theme`), `SESSION_GAP_HOURS` (6), `GROUP_DUPLICATES` (true), `GROUP_MIN_SHARED_WORDS` (3), `GROUP_SIMILARITY` (0.5, higher = stricter), `IMPORTANCE_LEVELS`, `CATEGORY_COLORS`, `NEUTRAL_COLOR`, `TYPE_LABELS`. Also `THEMES` and `STOP_WORDS` as constants below CONFIG.
+  - Phones (max-width 640px) override both: `--hero-height: 360px`, `--hero-focus: 50% 10%`.
+- **CONFIG keys in `app.js`:** `DATA_URL`, `DATA_URL_LOCAL_TEST`, `STALE_HOURS`, `HIGH_IMPORTANCE` (8), `TOP_THREATS` (3), `DEFAULT_SORT`, `STORAGE_KEY` (`neopheme.v1`, legacy name kept on purpose), `SESSION_GAP_HOURS` (6), `GROUP_DUPLICATES` (true), `GROUP_MIN_SHARED_WORDS` (3), `GROUP_SIMILARITY` (0.5, higher = stricter), `IMPORTANCE_LEVELS`, `CATEGORY_COLORS`, `NEUTRAL_COLOR`, `TYPE_LABELS`. Also `STOP_WORDS` as a constant below CONFIG.
 - **Importance levels:** `IMPORTANCE_LEVELS` maps score to a level name (1-3 low, 4-6 mid, 7-8 high, 9-10 crit). The colors for each level live in `style.css` (`.card[data-level=...]`).
 - **Category chip colors:** `CONFIG.CATEGORY_COLORS`.
 - The overlay on the hero is light at the top and dark only near the bottom, so the head is not dimmed and the text stays readable.
@@ -57,12 +55,12 @@ Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/N
 - Links are validated with `new URL()`; only `http:` and `https:` are accepted (`safeUrl()`). Links use `target="_blank"` and `rel="noopener noreferrer"`.
 - Cards use `summary` only, never `content`.
 - No tokens, keys, analytics or third-party requests. The only network request is `data.json`.
-- `localStorage` holds only my own choices and feed titles/summaries (saved snapshots, hidden ids, seen times, theme). Saved snapshots go through `normalizeItem` again and are rendered with `textContent`. Storage access is wrapped in try/catch, so blocked storage just means nothing is remembered.
+- `localStorage` holds only my own choices and feed titles/summaries (saved snapshots, hidden ids, seen times). Saved snapshots go through `normalizeItem` again and are rendered with `textContent`. Storage access is wrapped in try/catch, so blocked storage just means nothing is remembered.
 - The localStorage data is per browser and per site: `localhost:8000` and the live site do not share it, and nothing syncs between devices.
 - Security scan: `Select-String` for `token` matches `app.js` lines about `tokens` (title words used for duplicate grouping). These are false positives, not secrets.
 
 **How data is loaded**
-- `CONFIG.DATA_URL = "data.json"` (relative) in production. On localhost, 127.0.0.1 or file:// it reads `https://n3xmar.github.io/NeoPheme/data.json`.
+- `CONFIG.DATA_URL = "data.json"` (relative) in production. On localhost, 127.0.0.1 or file:// it reads `https://n3xmar.github.io/MeerWatch/data.json`.
 - Every fetch appends `?t=Date.now()` and uses `cache: "no-store"`.
 - The load fails with an error if the response is not OK or `items` is not an array.
 - Stale threshold: `CONFIG.STALE_HOURS = 36`. The banner text in `index.html` says "36 hours" in plain text, so edit both together.
@@ -80,27 +78,37 @@ Published to the root of `gh-pages` (v2, 2026-11-23): https://n3xmar.github.io/N
 
 ## Problems and fixes
 
-- **Server started from the wrong folder.** `python -m http.server` was run inside `C:\Dev\NeoPheme-pages` (the published copy), so local changes did not show. Fix: run it inside `C:\Dev\NeoPheme\dashboard` and hard-refresh (`Ctrl+Shift+R`).
+- **Server started from the wrong folder.** `python -m http.server` was run inside `C:\Dev\MeerWatch-pages` (the published copy), so local changes did not show. Fix: run it inside `C:\Dev\MeerWatch\dashboard` and hard-refresh (`Ctrl+Shift+R`).
 - **Hero size edits had no effect.** `style.css` had a "v2 additions" block at the end with a second `.hero { min-height: clamp(180px, 26vh, 250px) }` that overrode the earlier rule. Fix: merged everything into one clean `style.css` with a single hero rule driven by `--hero-height` and `--hero-focus`.
 - **Hero was too short and cut the head.** Fixed with `--hero-height: clamp(300px, 30vw, 470px)` and `--hero-focus: 50% 0%`.
-- **Security scan ran from the wrong folder** (`dashboard\dashboard` not found). Run it from `C:\Dev\NeoPheme`.
-- The tagline "Pheme heard it first." is in the live page.
+- **Security scan ran from the wrong folder** (`dashboard\dashboard` not found). Run it from `C:\Dev\MeerWatch`.
+
 
 ## Deployment facts (how to publish)
 
-1. In `C:\Dev\NeoPheme`: run the security scan, `git status`, `git add` the changed dashboard files by name, commit, push to `main`.
-2. `git -C C:\Dev\NeoPheme-pages pull` (n8n commits `data.json` there daily).
-3. `Copy-Item` each changed file by name into `C:\Dev\NeoPheme-pages` (`index.html`, `css\style.css`, `js\app.js`, `assets\pheme.webp`).
-4. `git -C C:\Dev\NeoPheme-pages status`: only those files may show as modified, never `data.json`.
-5. `git -C C:\Dev\NeoPheme-pages add <files by name>`, commit, push.
+1. In `C:\Dev\MeerWatch`: run the security scan, `git status`, `git add` the changed dashboard files by name, commit, push to `main`.
+2. `git -C C:\Dev\MeerWatch-pages pull` (n8n commits `data.json` there daily).
+3. `Copy-Item` each changed file by name into `C:\Dev\MeerWatch-pages` (`index.html`, `css\style.css`, `js\app.js`, `assets\meerwatch.webp`).
+4. `git -C C:\Dev\MeerWatch-pages status`: only those files may show as modified, never `data.json`.
+5. `git -C C:\Dev\MeerWatch-pages add <files by name>`, commit, push.
 6. Wait up to about 10 minutes (Pages CDN), then hard-refresh the live site. Check DevTools Network for 404s.
 
 Rules: never `git add .`, never delete `data.json`, all paths relative (no leading `/`), no build step.
 
+## Rebrand: NeoPheme -> MeerWatch (Phase 7b, 2026-11-24)
+
+- **Name:** MeerWatch. **Tagline:** "Always on watch." The repo, the live site URL, the local folders (`C:\Dev\MeerWatch`, `C:\Dev\MeerWatch-pages`) and the n8n GitHub node now use the new name.
+- **Look:** one theme, amber on charcoal. Palette in `:root`: `--bg-deep #121317`, `--bg-panel #1a1c21`, `--bg-panel-2 #23262d`, `--border #2f333c`, amber `#f59e0b`, light amber `#fbbf24`, orange `#fb923c` for critical (9-10), `--text #ececf0`, `--text-muted #9a9fab`, danger `#f43f5e`.
+- **Legacy variable names:** `--cyan` and `--purple` hold amber and `--magenta` holds orange. Misleading but harmless; do not rename without updating every rule that uses them.
+- **Importance colors:** 1-3 and 4-6 muted, 7-8 amber (`high`), 9-10 orange with glow (`crit`).
+- **Hero:** new image `assets/meerwatch.webp` (WebP, about 0.2 MB). The logo (winged eye + laurel) and the Greek key border come from the old Pheme theme and were kept on purpose.
+- **Legacy names kept on purpose:** the localStorage key `neopheme.v1` and the Data Table `neopheme_items`. localStorage is tied to the origin (`n3xmar.github.io`), not to the repo path, so saved and hidden stories survived the rename. The key `neopheme.theme` is no longer used.
+- **Old URL:** `https://n3xmar.github.io/NeoPheme/` stopped working (GitHub Pages does not redirect).
+
 ## Open tasks
 
-- Verify the live site after publishing: no 404s, `data.json` loaded from its own origin, filters, themes, save/hide/restore, mobile layout.
-- Verify the first scheduled n8n runs on 2026-11-24, and that `generated_at` updates and the stale banner behaves correctly.
+- Verified live after the rebrand (2026-11-24): hero image, mobile layout, data loading.
+- Scheduled export format verified on 2026-11-25 (see `docs/phase-5-6.md`); watch the next 07:15 run.
 - Known limitations:
   - Stats (total, high importance, top category, sources) ignore filters and hidden stories, and count items, not grouped stories.
   - Search is a simple substring match on title and summary.
