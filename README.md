@@ -4,7 +4,7 @@ A personal cybersecurity news dashboard. It collects security news and research 
 
 **Live site:** https://n3xmar.github.io/MeerWatch/
 
-![MeerWatch dashboard](docs/screenshot.png)
+![MeerWatch dashboard](docs/screenshot.jpg)
 
 ## How it works
 
